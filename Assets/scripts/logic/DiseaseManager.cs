@@ -136,13 +136,19 @@ public class DiseaseManager : MonoBehaviour
             gameObject.SetActive(false);
             return;
         }
-
-        MessageManager.Instance.AddMessage("Starting wave " + (1+m_CurrentWave) );
+			
+		if (m_CurrentWave == 1) 
+		{
+			MessageManager.Instance.AddMessage ("A pathogen detect! Please advice!");
+		}
+		else 
+		{
+			MessageManager.Instance.AddMessage ("New pathogen detect! Prepare for wave " + (1 + m_CurrentWave));
+		}
     }
 
     private void EndWave()
     {
-        MessageManager.Instance.AddMessage("Wave " + (1+m_CurrentWave) + " complete!");
         m_WaveTimer = 0f;
         m_State = State.Waiting;
     }
@@ -152,6 +158,11 @@ public class DiseaseManager : MonoBehaviour
 		Node n = GraphManager.Instance.GetRandomNode();
 	
 		n = GraphManager.Instance.GetRandomNode(); 
+
+		var position = n.transform.position;
+
+		MessageManager.Instance.AddMessage("Outbreak detected at\nX:" + n.transform.position.x + ", Y:" + n.transform.position.y,
+			() => CameraPanAndZoom.Instance.GoToPoint(position));
 
         return AddDisease(n);
     }
@@ -177,11 +188,6 @@ public class DiseaseManager : MonoBehaviour
 			}
 
 			diseases.Add(disease);
-
-			var position = disease.transform.position;
-
-			MessageManager.Instance.AddMessage("Outbreak detected at\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y,
-				() => CameraPanAndZoom.Instance.GoToPoint(position));
 
             return true;
         }
@@ -280,7 +286,7 @@ public class DiseaseManager : MonoBehaviour
 
 		pastInflicted += Mathf.FloorToInt(disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation);
 
-		MessageManager.Instance.AddMessage("Pandemic alert!\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
+		MessageManager.Instance.AddMessage("Uncontrolled outbreak! Quarantine issued\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
 
 		diseases.Remove(disease);
 
