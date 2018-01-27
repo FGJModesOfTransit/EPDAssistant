@@ -43,6 +43,13 @@ public class Disease : MonoBehaviour
 		if (progress >= 1) 
 		{
 			ScreenShake.Instance.Shake (0.5f);
+
+            List<Node> neighbors = GraphManager.Instance.GetNeighbors(GetComponent<Node>());
+            foreach (Node n in neighbors)
+            {
+                DiseaseManager.Instance.AddDisease(n);
+            }
+            GetComponent<Node>().SetLost();
 			DiseaseManager.Instance.RemoveDisease(this);
 		}
 	}

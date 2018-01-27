@@ -22,10 +22,13 @@ public class NodeSelectionManager : MonoBehaviour
 
 	[SerializeField]
 	private GameObject selectionPrefab;
+	[SerializeField]
+	private GameObject routePrefab;
 
 	private Canvas nodeSelectorCanvas;
 
 	private List<GameObject> buttonPool = new List<GameObject>();
+	private List<GameObject> routePool = new List<GameObject>();
 
 	public GameObject GetNodeSelector(Node node)
 	{
@@ -33,22 +36,32 @@ public class NodeSelectionManager : MonoBehaviour
 		{
 			nodeSelectorCanvas = GetComponent<Canvas> ();
 		}
-
-		var button =  buttonPool.FirstOrDefault (candidate => !candidate.activeInHierarchy);
-	
-		if (button == null) 
-		{
-			button = GameObject.Instantiate (selectionPrefab, nodeSelectorCanvas.transform);
-			button.transform.position = node.transform.position;
-			buttonPool.Add (button);
+		GameObject obj;
+		if (node.OnRoute) {
+			obj = routePool.FirstOrDefault (candidate => !candidate.activeInHierarchy);
+		} else {
+			obj = buttonPool.FirstOrDefault (candidate => !candidate.activeInHierarchy);
 		}
-		else 
-		{
-			button.transform.position = node.transform.position;
-			button.SetActive(true);
+		if (obj == null) {
+				if(node.OnRoute)
+				{
+					obj = GameObject.Instantiate (routePrefab, nodeSelectorCanvas.transform);
+					obj.transform.position = node.transform.position;
+					routePool.Add (obj);
+				}
+				else
+				{
+					obj = GameObject.Instantiate (selectionPrefab, nodeSelectorCanvas.transform);
+					obj.transform.position = node.transform.position;
+					buttonPool.Add (obj);
+				}
+		} else {
+			obj.transform.position = node.transform.position;
+			obj.SetActive (true);
 		}
 
-		return button;
+
+		return obj;
 	}
 
 	public void DisableButton(GameObject button)
