@@ -99,11 +99,10 @@ public class Movement : MonoBehaviour
 		Node nextNode = route_ [0];
 		route_.RemoveAt (0);
 
-		//TODO: get route speed
-//		Connection conn = manager
 		Connection conn = graph_.GetConnection(currentNode_, nextNode);
 
 		float routeSpeed = conn.TravelTime;
+		Debug.Log("Setting travel time to: " + routeSpeed);
 		id = LeanTween.move(gameObject, nextNode.gameObject.transform, routeSpeed).id;
 		LTDescr d = LeanTween.descr( id );
 
