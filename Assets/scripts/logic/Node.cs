@@ -20,6 +20,8 @@ public class Node : MonoBehaviour
 
 	public bool OnRoute = false;
 
+	public float LastHealed { get; set; }
+
 	private bool isSelectable;
 	public bool IsSelectable
 	{
