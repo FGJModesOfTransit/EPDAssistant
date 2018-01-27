@@ -23,6 +23,14 @@ public class Connection : MonoBehaviour
         m_Type = type;
     }
 
+		public Node OtherEnd(Node node) 
+		{
+			if (m_Node1 != node)
+				return m_Node1;
+
+			return m_Node2;
+		}
+
     private void EditorUpdate()
     {
         if (m_Node1 != null)
