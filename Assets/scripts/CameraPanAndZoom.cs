@@ -58,6 +58,17 @@ public class CameraPanAndZoom : MonoBehaviour
 		gameCamera = GetComponent<Camera>();
 	}
 
+	IEnumerator Start()
+	{
+		yield return new WaitForSeconds (1);
+
+		var player = GameObject.FindWithTag ("Player");
+		if (player != null) 
+		{
+			GoToPoint(player.transform.position);
+		}
+	}
+
 	public void GoToPoint(Vector3 point)
 	{
 		if (goToAnimation != null) 
