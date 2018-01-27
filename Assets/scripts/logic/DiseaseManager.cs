@@ -156,7 +156,7 @@ public class DiseaseManager : MonoBehaviour
 			
 		if (m_CurrentWave == 0) 
 		{
-			MessageManager.Instance.AddMessage ("A pathogen detected! Please advice!");
+			MessageManager.Instance.AddMessage ("A pathogen detected! Stand by.");
 		}
 		else 
 		{
@@ -182,7 +182,7 @@ public class DiseaseManager : MonoBehaviour
 		{
 			var position = n.transform.position;
 
-			MessageManager.Instance.AddMessage("Outbreak detected!\n[Locate]",
+			MessageManager.Instance.AddMessage("Outbreak detected! Please advice.\n[Locate]",
 				() => CameraPanAndZoom.Instance.GoToPoint(position));
 		}
 
