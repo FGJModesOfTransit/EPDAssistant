@@ -55,7 +55,7 @@ MonoBehaviour:
   m_Node1: {fileID: 0}
   m_Node2: {fileID: 0}
   m_Type: 0
-  Width: 1
+  Width: 0.6
 --- !u!212 &212808139812422706
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -94,9 +94,9 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 0.32, y: 0.32}
-  m_AdaptiveModeThreshold: 0.5
+  m_DrawMode: 2
+  m_Size: {x: 0.4, y: 0.76}
+  m_AdaptiveModeThreshold: 0.443
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
