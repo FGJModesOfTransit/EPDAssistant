@@ -138,7 +138,7 @@ public class DiseaseManager : MonoBehaviour
             return;
         }
 			
-		if (m_CurrentWave == 1) 
+		if (m_CurrentWave == 0) 
 		{
 			MessageManager.Instance.AddMessage ("A pathogen detect! Please advice!");
 		}
