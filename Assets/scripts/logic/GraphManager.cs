@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class GraphManager : MonoBehaviour
 {
-    public GameObject ConnectionPrefab;
-
-    public Sprite[] Sprites;
+    public GameObject[] ConnectionPrefabs;
 
     public static GraphManager Instance
     {

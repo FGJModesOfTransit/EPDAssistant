@@ -40,7 +40,7 @@ class NodeEditor : Editor
                         Node otherNode = other.GetComponent<Node>();
                         if ( otherNode != null && otherNode != me)
                         {
-                            GameObject connObj = PrefabUtility.InstantiatePrefab(GraphManager.Instance.ConnectionPrefab) as GameObject;
+                            GameObject connObj = PrefabUtility.InstantiatePrefab(GraphManager.Instance.ConnectionPrefabs[(int)type]) as GameObject;
 
                             GraphManager.Instance.CreateConnection(connObj, me, otherNode, type);
                             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
