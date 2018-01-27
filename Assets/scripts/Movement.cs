@@ -51,33 +51,69 @@ public class Movement : MonoBehaviour
 		Debug.Log("Adding a new target");
 
 		if (currentNode_ == null) {
-			Debug.Log ("Current node not set! Set currrent node in editor.");
+			Debug.LogError ("Current node not set! Set currrent node in editor.");
 			return;
 	  }
 
-		if (!moving_) {
+		if (target.OnRoute) {
+			Debug.Log ("Deleting route");
+			//check if on route and delete route from that point onwards
+
+			if (target == currentNode_) {
+				Debug.Log ("Its the curren node");
+				if (route_.Count > 0) {
+					GraphManager.Instance.GetConnection (currentNode_, 
+						route_ [0]).SetOnPath (false, false);
+
+
+					if (route_.Count > 1) {
+						for (int i = 1; i < route_.Count; ++i) {
+							GraphManager.Instance.GetConnection (route_ [i - 1], 
+								route_ [i]).SetOnPath (false, false);
+						}
+					}
+				}
+				route_.Clear ();
+			} else {
+				// delete nodes from end of route until we find the clickd node
+				for (int i = route_.Count; i > 1; --i) {
+					if(route_[i - 1] == target)
+					{
+						break;
+					}
+					GraphManager.Instance.GetConnection (route_ [i - 2], 
+						route_ [i - 1]).SetOnPath (false, false);
+					route_.RemoveAt (i - 1);
+				}
+			}
+		}
+		else if (!moving_) {
 			Debug.Log ("Starting to move");
 			route_.Add (target);
 			moveNext ();
 
 		} else if (route_.Count > 0 && target == route_ [route_.Count - 1]) {
 			Debug.Log ("Removing a node from route");
-            if (route_.Count >= 2)
-            {
-                GraphManager.Instance.GetConnection(route_[route_.Count - 2], route_[route_.Count - 1]).SetOnPath(false, false);
-            }
+      if (route_.Count >= 2)
+      {
+          GraphManager.Instance.GetConnection(route_[route_.Count - 2], route_[route_.Count - 1]).SetOnPath(false, false);
+      }
             route_.RemoveAt (route_.Count - 1);
 		} else
         {
             Node prev = route_.Count > 0 ? route_[route_.Count-1] : currentNode_;
             Connection conn = GraphManager.Instance.GetConnection(prev, target);
             conn.SetOnPath(true, conn.m_Node1 == target);
-			route_.Add (target);
+			if (route_.Count < 2) {
+				route_.Add (target);
+			}
 		}
 
 		disableHighlighted ();
 		highlightRoute ();
-		highlightNeighbours ();
+		if (route_.Count < 2) {
+			highlightNeighbours ();
+		}
 	}
 
 	void disableHighlighted()
@@ -121,7 +157,7 @@ public class Movement : MonoBehaviour
 			var conns = graph_.GetConnections (target);
 			foreach (Connection c in conns) {
 				Node high = c.OtherEnd (target);
-				if (!high.OnRoute) {
+				if (!high.OnRoute && !high.Lost) {
 					//Debug.Log ("Highligting node:" + high.name, high);
 					high.IsSelectable = true;
 					highlighted_.Add (high);
