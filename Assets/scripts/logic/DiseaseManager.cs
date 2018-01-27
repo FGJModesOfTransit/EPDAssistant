@@ -22,6 +22,8 @@ public class DiseaseManager : MonoBehaviour
     public Gradient DiseaseColor;
     public DiseaseWave[] Waves;
     public float TimeBetweenWaves;
+    public float GrowthSpeed;
+    public int SpreadDelay;
 
 	public static Action<Node, Disease> OnDiseaseAdded;
 
@@ -30,6 +32,10 @@ public class DiseaseManager : MonoBehaviour
     private int m_DiseaseCounter;
     private float m_WaveTimer;
     private State m_State;
+
+	private List<Disease> diseases = new List<Disease>();
+
+	private int pastInflicted = 0;
 
     public static DiseaseManager Instance
     {
@@ -50,6 +56,13 @@ public class DiseaseManager : MonoBehaviour
     {
         Image i = Instantiate<Image>(ImagePrefab, m_DiseaseCanvas.transform);
         return i;
+    }
+
+    public void SpreadFrom(Node n)
+    {
+        List<Node> neighbors = GraphManager.Instance.GetNeighbors(n);
+        Node victim = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
+        AddDisease(victim);
     }
 
     private static DiseaseManager m_Instance;
@@ -76,7 +89,7 @@ public class DiseaseManager : MonoBehaviour
 			Disease d = node.GetComponent<Disease>();
 			if ( d != null)
 			{
-				d.Remove();
+				HealDisease(d);
 			}
 		}
 	}
@@ -114,6 +127,11 @@ public class DiseaseManager : MonoBehaviour
     public bool AddDisease()
     {
         Node n = GraphManager.Instance.GetRandomNode();
+        return AddDisease(n);
+    }
+
+    public bool AddDisease(Node n)
+    { 
         Disease disease = n.GetComponent<Disease>();
 		if (disease == null)
         {
@@ -125,6 +143,7 @@ public class DiseaseManager : MonoBehaviour
             }
             return true;
         }
+		diseases.Add (disease);
         return false;
     }
 
@@ -136,7 +155,7 @@ public class DiseaseManager : MonoBehaviour
             Disease d = nodes[i].GetComponent<Disease>();
             if ( d != null)
             {
-                d.Remove();
+				HealDisease(d);
             }
         }
     }
@@ -195,4 +214,30 @@ public class DiseaseManager : MonoBehaviour
 
         }
     }
+
+	public void HealDisease(Disease disease)
+	{
+		pastInflicted += Mathf.FloorToInt(disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation);
+
+		MessageManager.Instance.AddMessage("Outbreak contained at\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
+
+		diseases.Remove (disease);
+
+		disease.Remove();
+	}
+
+	public int CountCurrentInflicted()
+	{
+		var count = 0f;
+		foreach (var disease in diseases) 
+		{
+			count += disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation;
+		}
+		return Mathf.FloorToInt (count);
+	}
+
+	public int CountTotalInflicted()
+	{
+		return pastInflicted + CountCurrentInflicted();
+	}
 }
