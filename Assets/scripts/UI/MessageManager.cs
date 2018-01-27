@@ -47,9 +47,6 @@ public class MessageManager : MonoBehaviour
 	void Awake()
 	{
 		canvas = GetComponent<Canvas> ();
-
-		AddMessage ("Testing...");
-		AddMessage ("Testing, testing...");
 	}
 
 	void OnEnable()
