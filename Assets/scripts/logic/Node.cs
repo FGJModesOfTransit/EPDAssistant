@@ -50,13 +50,22 @@ public class Node : MonoBehaviour
     public void SetLost()
     {
 		    NodeSelectionManager.Instance.ReleaseNodeSelector(this);
-        m_Lost = true;
-        Transform imTrs = transform.Find("NodeGraphic");
-        if ( imTrs != null )
-        {
-            var sprite = imTrs.gameObject.GetComponent<SpriteRenderer>();
-            if (sprite != null) sprite.color = Color.red;
-        }
+		var conns = GraphManager.Instance.GetAllConnections(this);
+		foreach (var conn in conns)
+		{
+			Color c = conn.gameObject.GetComponent<SpriteRenderer> ().color;
+			//c = new Color (c.r, c.g, c.b, 0.3f);
+			c = new Color (0.2f, 0.2f, 0.2f, 0.3f);
+			conn.gameObject.GetComponent<SpriteRenderer> ().color = c;
+			//msg += otherName + ", ";
+		}
+      m_Lost = true;
+      Transform imTrs = transform.Find("NodeGraphic");
+      if ( imTrs != null )
+      {
+          var sprite = imTrs.gameObject.GetComponent<SpriteRenderer>();
+          if (sprite != null) sprite.color = Color.red;
+      }
     }
 
     public bool Lost
