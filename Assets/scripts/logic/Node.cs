@@ -22,6 +22,7 @@ public class Node : MonoBehaviour
 				if (isSelectable) 
 				{
 					selectionButton = NodeSelectionManager.Instance.GetNodeSelector(this);
+					selectionButton.GetComponent<Selecting> ().n = this;
 				}
 				else 
 				{

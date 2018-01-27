@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour {
 
-	public GameObject currentNode_ = null;
+	public Node currentNode_ = null;
 	bool moving_ = false;
 
 	public GraphManager graph_ = null;
 
-	List<GameObject> route_ = new List<GameObject> ();
+	List<Node> route_ = new List<Node> ();
 
 	List<Node> highlighted_ = new List<Node> ();
 
@@ -17,7 +17,7 @@ public class Movement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		if (graph_ == null) {
-			Debug.Log ("No graphmanager set for movement(in player)");
+			Debug.Log ("No graphmanager set for movement(in player)" + currentNode_.name);
 		}
 		highlightNeighbours ();
 	}
@@ -26,9 +26,10 @@ public class Movement : MonoBehaviour {
 	void Update () {
 	}
 
-	public void AddTarget(GameObject target)
+	public void AddTarget(Node target)
 	{
 		// assumes always legal
+		Debug.Log("Adding a new target");
 
 		if (currentNode_ == null) {
 			Debug.Log ("Current node not set! Set currrent node in editor.");
@@ -36,12 +37,14 @@ public class Movement : MonoBehaviour {
 	  }
 		route_.Add (target);
 		if (!moving_) {
+			Debug.Log ("Starting to move");
 			moveNext ();
 		} else if (route_.Count > 0 && target == route_ [route_.Count - 1]) {
-			//route_.RemoveAt (route_.Count - 1);
+			Debug.Log ("Removing a node from route");
+			route_.RemoveAt (route_.Count - 1);
+			disableHighlighted ();
+			highlightNeighbours ();
 		}
-		disableHighlighted ();
-		highlightNeighbours ();
 	}
 
 	void disableHighlighted()
@@ -55,9 +58,9 @@ public class Movement : MonoBehaviour {
 	void highlightNeighbours()
 	{
 		List<Connection> conns;
-		Node highlight = currentNode_.GetComponent<Node>();
+		Node highlight = currentNode_;
 		if (route_.Count > 0) {
-			highlight = route_ [route_.Count - 1].GetComponent<Node>();
+			highlight = route_ [route_.Count - 1];
 		}
 		conns = graph_.GetConnections (highlight);
 		foreach (Connection c in conns) {
@@ -73,12 +76,12 @@ public class Movement : MonoBehaviour {
 			return;
 		}
 		moving_ = true;
-		GameObject nextNode = route_ [0];
+		Node nextNode = route_ [0];
 		route_.RemoveAt (0);
 
 		//TODO: get route speed
 		float routeSpeed = 1.0f;
-		id = LeanTween.move(gameObject, nextNode.transform, routeSpeed).id;
+		id = LeanTween.move(gameObject, nextNode.gameObject.transform, routeSpeed).id;
 		LTDescr d = LeanTween.descr( id );
 
 		if(d!=null){ // if the tween has already finished it will return null

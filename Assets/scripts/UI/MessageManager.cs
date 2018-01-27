@@ -92,13 +92,16 @@ public class MessageManager : MonoBehaviour
 		}
 	}
 
-	private void HideCurrentMessage()
+	public void HideCurrentMessage()
 	{
-		currentMessage.Complete = true;
+		if (!currentMessage.Complete) 
+		{
+			currentMessage.Complete = true;
 
-		LeanTween.moveY (messagePanel.GetComponent<RectTransform> (), 64 * canvas.scaleFactor, 0.2f)
-			.setEase (LeanTweenType.easeInCubic)
-			.setOnComplete(() => ShowNextMessage());
+			LeanTween.moveY (messagePanel.GetComponent<RectTransform> (), 64 * canvas.scaleFactor, 0.2f)
+				.setEase (LeanTweenType.easeInCubic)
+				.setOnComplete(() => ShowNextMessage());
+		}
 	}
 
 	private void ShowNextMessage()
@@ -106,7 +109,10 @@ public class MessageManager : MonoBehaviour
 		if (messageQueue.Count > 0) 
 		{
 			currentMessage = messageQueue.Dequeue();
-			messagePanel.SetActive(true);
+			if (!messagePanel.activeInHierarchy) 
+			{
+				messagePanel.SetActive (true);
+			}
 			messagePanelText.text = currentMessage.Content;
 
 			LeanTween.moveY(messagePanel.GetComponent<RectTransform>(), 0, 0.2f)
@@ -114,6 +120,7 @@ public class MessageManager : MonoBehaviour
 		}
 		else 
 		{
+			currentMessage = null;
 			messagePanel.SetActive(false);
 		}
 	}
