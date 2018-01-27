@@ -55,7 +55,12 @@ public class CameraPanAndZoom : MonoBehaviour
 	{
 		Vector3 difference = Vector3.zero;
 
-		if (Input.GetMouseButton(0))
+		if (Input.GetMouseButtonUp(0)) 
+		{
+			underInertia = true;
+			dragging = false;
+		}
+		else if (Input.GetMouseButton(0))
 		{
 			var touchposition = Input.mousePosition;
 			if (Input.touchCount > 0) 
@@ -72,11 +77,6 @@ public class CameraPanAndZoom : MonoBehaviour
 		}
 		else
 		{
-			if (Input.GetMouseButtonUp(0)) 
-			{
-				underInertia = true;
-			}
-
 			dragging = false;
 		}
 

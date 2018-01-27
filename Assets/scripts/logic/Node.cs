@@ -4,6 +4,34 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
+	private GameObject selectionButton;
+
+	private bool isSelectable;
+	public bool IsSelectable
+	{
+		get
+		{
+			return isSelectable;
+		}
+		set
+		{ 
+			if (isSelectable != value) 
+			{
+				isSelectable = value;
+
+				if (isSelectable) 
+				{
+					selectionButton = NodeSelectionManager.Instance.GetNodeSelector(this);
+				}
+				else 
+				{
+					NodeSelectionManager.Instance.DisableButton(selectionButton);
+					selectionButton = null;
+				}
+			}
+		}
+	}
+
     public void DebugListConnections()
     {
         string msg = "Connections for node " + gameObject.name;
@@ -18,19 +46,9 @@ public class Node : MonoBehaviour
 
     }
 
-    void Start ()
-    {
-	}
-	
-	void Update ()
-    {
-		
-	}
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position, 1f);
-        
     }
 }

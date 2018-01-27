@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +40,10 @@ public class GraphManager : MonoBehaviour
         c.gameObject.name = "Connection " + n1.gameObject.name + " to " + n2.gameObject.name;
     }
 
+    public Node GetRandomNode()
+    {
+        return m_Nodes[UnityEngine.Random.Range(0, m_Nodes.Length)];
+    }
 
     void Awake()
     {
@@ -55,6 +60,7 @@ public class GraphManager : MonoBehaviour
                 Debug.LogError("Error: Node " + nodes[i].name + " has a node tag but no Node component!");
             } else
             {
+                Debug.Log("Added node " + m_Nodes[i].name);
                 m_Connections[m_Nodes[i]] = new List<Connection>();
             }
         }
@@ -72,8 +78,16 @@ public class GraphManager : MonoBehaviour
                 } else
                 {
                     ++connCount;
-                    m_Connections[c.m_Node1].Add(c);
-                    m_Connections[c.m_Node2].Add(c);
+                    if (m_Connections.ContainsKey(c.m_Node1))
+                    {
+                        m_Connections[c.m_Node1].Add(c);
+                    }
+                    else Debug.LogError("Error: Connection " + conns[i].name + " refers to node " + c.m_Node1 + " which doesn't exist");
+                    if (m_Connections.ContainsKey(c.m_Node1))
+                    {
+                        m_Connections[c.m_Node2].Add(c);
+                    }
+                    else Debug.LogError("Error: Connection " + conns[i].name + " refers to node " + c.m_Node2 + " which doesn't exist");
                 }
             } else
             {
