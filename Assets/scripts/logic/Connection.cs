@@ -19,8 +19,7 @@ public class Connection : MonoBehaviour
     public float Width = 5;
   	public float TravelTime = 1.0f;
 
-    private SpriteRenderer m_Sprite;
-
+    private GameObject m_RouteSprite;
 
     ConnectionType Type
     {
@@ -28,6 +27,18 @@ public class Connection : MonoBehaviour
         set { if ( m_Type != value )
             {
                 m_Type = value;
+            }
+        }
+    }
+
+    public void SetOnPath(bool value, bool inverted)
+    {
+        if (m_RouteSprite != null)
+        {
+            m_RouteSprite.gameObject.SetActive(value);
+            if (value)
+            {
+                Stretch(m_RouteSprite.gameObject, m_Node1.transform.position, m_Node2.transform.position, inverted);
             }
         }
     }
@@ -65,6 +76,12 @@ public class Connection : MonoBehaviour
 
     void OnEnable()
     {
+        Transform marker = transform.Find("RouteMarker");
+        if (marker != null ) m_RouteSprite = marker.gameObject;
+        if (m_RouteSprite)
+        {
+            m_RouteSprite.gameObject.SetActive(false);
+        }
     }
 
     private void Update()
