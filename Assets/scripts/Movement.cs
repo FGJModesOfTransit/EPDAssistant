@@ -7,51 +7,66 @@ public class Movement : MonoBehaviour {
 	public GameObject currentNode_ = null;
 	bool moving_ = false;
 
+	GraphManager graph_ = null;
+
 	List<GameObject> route_ = new List<GameObject> ();
+
+	List<Node> highlighted_ = new List<Node> ();
 
 	int id = 0;
 	// Use this for initialization
 	void Start () {
-		EnableAllowedMovement ();
+		if (graph_ == null) {
+			Debug.Log ("No graphmanager set for movement(in player)");
+		}
+		highlightNeighbours ();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 	}
 
 	public void AddTarget(GameObject target)
 	{
+		// assumes always legal
+
 		if (currentNode_ == null) {
 			Debug.Log ("Current node not set! Set currrent node in editor.");
 			return;
+	  }
+		route_.Add (target);
+		if (!moving_) {
+			moveNext ();
+		} else if (route_.Count > 0 && target == route_ [route_.Count - 1]) {
+			//route_.RemoveAt (route_.Count - 1);
 		}
-
-		//check if target legal
-//		if (route.Count > 0 && route [route.Count - 1].neighbour (target)
-		//			|| currentNode_.neighbour (target)) {
-		if(true){
-			route_.Add (target);
-			if (!moving_) {
-				moveNext ();
-			} else if (route_.Count > 0 && target == route_ [route_.Count - 1]) {
-
-				//route_.RemoveAt (route_.Count - 1);
-			}
-				
-			EnableAllowedMovement ();
-		}
+		disableHighlighted ();
+		highlightNeighbours ();
 	}
 
-	void EnableAllowedMovement()
+	void disableHighlighted()
 	{
-		// disable all
-		// then enable all allowed
+		foreach(Node n in highlighted_)
+		{
+			n.IsSelectable = false;
+		}
 	}
 
+	void highlightNeighbours()
+	{
+		List<Connection> conns;
+		Node highlight = currentNode_.GetComponent<Node>();
+		if (route_.Count > 0) {
+			highlight = route_ [route_.Count - 1].GetComponent<Node>();
+		}
+		conns = graph_.GetConnections (highlight);
+		foreach (Connection c in conns) {
+			c.OtherEnd (highlight).IsSelectable = true;
+		}
+	}
 
 	void moveNext()
 	{
-		
 		if (route_.Count == 0) {
 			Debug.Log ("Route finished");
 			moving_ = false;
@@ -73,4 +88,9 @@ public class Movement : MonoBehaviour {
 
 		currentNode_ = nextNode;
 	}
+	/*
+	Connection GetConnections(Node n1, Node n2)
+	{
+		
+	}*/
 }
