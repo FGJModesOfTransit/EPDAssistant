@@ -54,7 +54,7 @@ public class Movement : MonoBehaviour {
 
 	void disableHighlighted()
 	{
-		Debug.Log ("Clearing" + highlighted_.Count + " nodes.");
+		Debug.Log ("Clearing " + highlighted_.Count + " nodes.");
 		foreach(Node n in highlighted_)
 		{
 			n.IsSelectable = false;
@@ -68,12 +68,15 @@ public class Movement : MonoBehaviour {
 		Node highlight = currentNode_;
 		if (route_.Count > 0) {
 			highlight = route_ [route_.Count - 1];
+			highlight.IsSelectable = true;
 		}
 		conns = graph_.GetConnections (highlight);
+		Debug.Log ("Highlighting ends of" + conns.Count + " connections");
 		foreach (Connection c in conns) {
 			Node high = c.OtherEnd (highlight);
 			high.IsSelectable = true;
 			highlighted_.Add(high);
+			Debug.Log ("Highligting node:" + high.name);
 		}
 	}
 
