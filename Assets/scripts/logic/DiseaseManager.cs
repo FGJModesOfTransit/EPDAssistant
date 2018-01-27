@@ -226,12 +226,32 @@ public class DiseaseManager : MonoBehaviour
 		disease.Remove();
 	}
 
+	public void RemoveDisease(Disease disease)
+	{
+		pastInflicted += Mathf.FloorToInt(disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation);
+
+		MessageManager.Instance.AddMessage("Pandemic alert!\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
+
+		diseases.Remove (disease);
+
+		disease.Remove();
+	}
+
 	public int CountCurrentInflicted()
 	{
 		var count = 0f;
-		foreach (var disease in diseases) 
+
+		for(int i = 0; i < diseases.Count; i++)
 		{
-			count += disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation;
+			if (diseases [i] == null) 
+			{
+				diseases.RemoveAt (i);
+				i--;
+			}
+			else 
+			{
+				count += diseases[i].progress * (float)diseases[i].GetComponentInParent<Node>().CurrentPopulation;
+			}
 		}
 		return Mathf.FloorToInt (count);
 	}
