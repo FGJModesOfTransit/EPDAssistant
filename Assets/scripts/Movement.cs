@@ -77,6 +77,7 @@ public class Movement : MonoBehaviour
 
 		disableHighlighted ();
 		highlightNeighbours ();
+		highlightRoute ();
 	}
 
 	void disableHighlighted()
@@ -87,6 +88,15 @@ public class Movement : MonoBehaviour
 			n.IsSelectable = false;
 		}
 		highlighted_.Clear ();
+	}
+
+	void highlightRoute()
+	{
+		foreach (Node n in route_) {
+			Debug.Log ("Highligting route:" + n.name, n);
+			n.IsSelectable = true;
+			highlighted_.Add (n);
+		}
 	}
 
 	void highlightNeighbours()
