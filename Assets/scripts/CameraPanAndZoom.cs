@@ -68,7 +68,6 @@ public class CameraPanAndZoom : MonoBehaviour
 		{
 			GoToPoint(player.transform.position);
 			LeanTween.value (gameCamera.orthographicSize, (minCameraScale + maxCameraScale) * 0.5f, 1.5f)
-				.setEase(LeanTweenType.easeInCirc)
 				.setOnUpdate ((zoom) => {
 					gameCamera.orthographicSize = zoom;
 			});
