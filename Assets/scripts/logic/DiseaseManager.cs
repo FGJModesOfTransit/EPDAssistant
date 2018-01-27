@@ -4,10 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Serializable]
+public struct DiseaseWave
+{
+    public int count;
+}
+
 public class DiseaseManager : MonoBehaviour
 {
     public Image ImagePrefab;
     public Gradient DiseaseColor;
+    public DiseaseWave Waves;
 
     private Canvas m_DiseaseCanvas;
 
