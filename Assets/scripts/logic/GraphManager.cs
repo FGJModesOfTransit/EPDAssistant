@@ -1,9 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 public class GraphManager : MonoBehaviour
 {
@@ -31,8 +28,7 @@ public class GraphManager : MonoBehaviour
     {
         return m_Connections[n1];
     }
-
-	#if UNITY_EDITOR
+		
     // Called from the editor to set up a connection 
     public void CreateConnection(GameObject connObj, Node n1, Node n2, ConnectionType type)
     {
@@ -41,7 +37,6 @@ public class GraphManager : MonoBehaviour
         c.Set(n1, n2, type);
         c.gameObject.name = "Connection " + n1.gameObject.name + " to " + n2.gameObject.name;
     }
-	#endif
 
     void Awake()
     {
