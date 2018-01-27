@@ -56,6 +56,7 @@ public class CameraPanAndZoom : MonoBehaviour
 	private void Awake()
 	{
 		gameCamera = GetComponent<Camera>();
+		gameCamera.orthographicSize = maxCameraScale;
 	}
 
 	IEnumerator Start()
@@ -66,6 +67,11 @@ public class CameraPanAndZoom : MonoBehaviour
 		if (player != null) 
 		{
 			GoToPoint(player.transform.position);
+			LeanTween.value (gameCamera.orthographicSize, (minCameraScale + maxCameraScale) * 0.5f, 1.5f)
+				.setEase(LeanTweenType.easeInCirc)
+				.setOnUpdate ((zoom) => {
+					gameCamera.orthographicSize = zoom;
+			});
 		}
 	}
 
