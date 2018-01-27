@@ -76,10 +76,11 @@ public class DiseaseManager : MonoBehaviour
         List<Node> neighbors = GraphManager.Instance.GetNeighbors(n);
         Node victim = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
 
-		var effect = Instantiate (spreadEffectPrefab, n.transform.position, Quaternion.identity);
-		effect.transform.LookAt (victim.transform.position, -Vector3.forward);
-
-        AddDisease(victim);
+		if (AddDisease (victim)) 
+		{
+			var effect = Instantiate (spreadEffectPrefab, n.transform.position, Quaternion.identity);
+			effect.transform.LookAt (victim.transform.position, -Vector3.forward);
+		}
     }
 
     private static DiseaseManager m_Instance;
