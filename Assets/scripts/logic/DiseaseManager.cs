@@ -18,6 +18,15 @@ public class DiseaseManager : MonoBehaviour
         InWave
     }
 
+	[SerializeField]
+	private GameObject creationEffectPrefab;
+
+	[SerializeField]
+	private GameObject healingEffectPrefab;
+
+	[SerializeField]
+	private GameObject doneEffectPrefab;
+
     public Image ImagePrefab;
     public Gradient DiseaseColor;
     public DiseaseWave[] Waves;
@@ -134,15 +143,18 @@ public class DiseaseManager : MonoBehaviour
     public bool AddDisease()
     {
 		Node n = GraphManager.Instance.GetRandomNode();
-		while (Movement.PlayerCharacter != null && n == Movement.PlayerCharacter.CurrentNode) 
-		{
+		//while (Movement.PlayerCharacter != null && n == Movement.PlayerCharacter.CurrentNode) 
+		//{
 			n = GraphManager.Instance.GetRandomNode(); 
-		}
+		//}
         return AddDisease(n);
     }
 
     public bool AddDisease(Node n)
-    { 
+    {
+        if (n.Lost) return false;
+        if (Movement.PlayerCharacter != null && n == Movement.PlayerCharacter.CurrentNode) return false;
+
         Disease disease = n.GetComponent<Disease>();
 		if (disease == null)
         {
@@ -152,6 +164,11 @@ public class DiseaseManager : MonoBehaviour
             {
                 OnDiseaseAdded(n, disease);
             }
+
+			if (creationEffectPrefab != null)
+			{
+				Instantiate (creationEffectPrefab, disease.transform.position, Quaternion.identity);
+			}
 
 			diseases.Add(disease);
 
@@ -231,6 +248,11 @@ public class DiseaseManager : MonoBehaviour
 
 	public void HealDisease(Disease disease)
 	{
+		if (healingEffectPrefab != null) 
+		{
+			Instantiate (healingEffectPrefab, disease.transform.position, Quaternion.identity);
+		}
+			
 		pastInflicted += Mathf.FloorToInt(disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation);
 
 		MessageManager.Instance.AddMessage("Outbreak contained at\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
@@ -242,6 +264,11 @@ public class DiseaseManager : MonoBehaviour
 
 	public void RemoveDisease(Disease disease)
 	{
+		if (doneEffectPrefab != null) 
+		{
+			Instantiate (doneEffectPrefab, disease.transform.position, Quaternion.identity);
+		}
+
 		pastInflicted += Mathf.FloorToInt(disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation);
 
 		MessageManager.Instance.AddMessage("Pandemic alert!\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
