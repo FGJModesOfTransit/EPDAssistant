@@ -49,6 +49,7 @@ public class Node : MonoBehaviour
 
     public void SetLost()
     {
+		    NodeSelectionManager.Instance.ReleaseNodeSelector(this);
         m_Lost = true;
         Transform imTrs = transform.Find("NodeGraphic");
         if ( imTrs != null )

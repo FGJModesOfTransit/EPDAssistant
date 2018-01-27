@@ -73,6 +73,7 @@ public class Movement : MonoBehaviour
 						}
 					}
 				}
+				route_.Clear ();
 			} else {
 				// delete nodes from end of route until we find the clickd node
 				for (int i = route_.Count; i > 1; --i) {
@@ -156,7 +157,7 @@ public class Movement : MonoBehaviour
 			var conns = graph_.GetConnections (target);
 			foreach (Connection c in conns) {
 				Node high = c.OtherEnd (target);
-				if (!high.OnRoute) {
+				if (!high.OnRoute && !high.Lost) {
 					//Debug.Log ("Highligting node:" + high.name, high);
 					high.IsSelectable = true;
 					highlighted_.Add (high);
