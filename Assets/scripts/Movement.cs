@@ -94,13 +94,13 @@ public class Movement : MonoBehaviour
 	void highlightRoute()
 	{
 
-		Debug.Log ("Highligting current node on route:" + currentNode_.name, currentNode_);
+		//Debug.Log ("Highligting current node on route:" + currentNode_.name, currentNode_);
 		currentNode_.OnRoute = true;
 		currentNode_.IsSelectable = true;
 		highlighted_.Add (currentNode_);
 
 		foreach (Node n in route_) {
-			Debug.Log ("Highligting route:" + n.name, n);
+			//Debug.Log ("Highligting route:" + n.name, n);
 			n.OnRoute = true;
 			n.IsSelectable = true;
 			highlighted_.Add (n);
@@ -117,12 +117,12 @@ public class Movement : MonoBehaviour
 		}
 
 		if (target != null) {
-			Debug.Log ("Target node:" + target.name, target);
+			//Debug.Log ("Target node:" + target.name, target);
 			var conns = graph_.GetConnections (target);
 			foreach (Connection c in conns) {
 				Node high = c.OtherEnd (target);
 				if (!high.OnRoute) {
-					Debug.Log ("Highligting node:" + high.name, high);
+					//Debug.Log ("Highligting node:" + high.name, high);
 					high.IsSelectable = true;
 					highlighted_.Add (high);
 				}
@@ -154,7 +154,7 @@ public class Movement : MonoBehaviour
 		float routeSpeed = conn.TravelTime * 
 			Vector2.Distance(currentNode_.gameObject.transform.position, 
 		  nextNode.gameObject.transform.position);
-		Debug.Log("Setting travel time to: " + routeSpeed);
+		//Debug.Log("Setting travel time to: " + routeSpeed);
 		if (conn.m_Type == ConnectionType.Path) {
 			id = LeanTween.move (gameObject, nextNode.gameObject.transform, routeSpeed).setEase (LeanTweenType.linear).id;
 		} else {
@@ -173,6 +173,10 @@ public class Movement : MonoBehaviour
         }
         prevNode_ = currentNode_;
 		currentNode_ = nextNode;
+
+		disableHighlighted ();
+		highlightRoute ();
+		highlightNeighbours ();
 	}
 
 	private void HandleMovementComplete()
