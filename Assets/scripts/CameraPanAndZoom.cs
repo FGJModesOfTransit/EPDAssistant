@@ -15,11 +15,17 @@ public class CameraPanAndZoom : MonoBehaviour
 	[SerializeField]
 	private float smoothTime = 0.5f;
 
+	[SerializeField]
+	private float minCameraScale = 1f;
+
+	[SerializeField]
+	private float maxCameraScale = 5f;
+
 	private bool dragging = false;
 
 	private Camera gameCamera;
 
-	private bool isZooming = false;
+	private bool isPinching = false;
 
 	private float pinchDistance = 0;
 
@@ -51,11 +57,16 @@ public class CameraPanAndZoom : MonoBehaviour
 
 		if (Input.GetMouseButton(0))
 		{
-			difference = (gameCamera.ScreenToWorldPoint(Input.mousePosition)) - transform.position;
+			var touchposition = Input.mousePosition;
+			if (Input.touchCount > 0) 
+			{
+				touchposition = Input.touches[0].position;
+			}
+			difference = (gameCamera.ScreenToWorldPoint(touchposition)) - transform.position;
 			if (!dragging)
 			{
 				dragging = true;
-				origin = gameCamera.ScreenToWorldPoint(Input.mousePosition);
+				origin = gameCamera.ScreenToWorldPoint(touchposition);
 			}
 			underInertia = false;
 		}
@@ -79,25 +90,32 @@ public class CameraPanAndZoom : MonoBehaviour
 
 	private void HandleZoom()
 	{
+		float scale = gameCamera.orthographicSize;
 		float step = Input.GetAxis("Mouse ScrollWheel") * gameCamera.orthographicSize * mouseZoomScale;
-		gameCamera.orthographicSize -= step;
+		scale -= step;
 
-		if (Input.touchCount > 2) 
+		if (Input.touchCount >= 2) 
 		{
-			var newPinchDistance = Vector2.Distance(Input.touches[0].position, Input.touches[1].position);
+			var newPinchDistance = Vector2.Distance (Input.touches [0].position, Input.touches [1].position);
 
-			if (isZooming) 
+			if (isPinching) 
 			{
 				var delta = newPinchDistance - pinchDistance;
 				delta /= Screen.height;
 				delta *= gameCamera.orthographicSize * touchZoomScale;
-				gameCamera.orthographicSize -= delta;
+				scale -= delta;
 			}
 
 			pinchDistance = newPinchDistance;
 
-			isZooming = true;
+			isPinching = true;
 		}
+		else 
+		{
+			isPinching = false;
+		}
+
+		gameCamera.orthographicSize = Mathf.Clamp(scale, minCameraScale, maxCameraScale);
 	}
 
 	private void HandleInertia()

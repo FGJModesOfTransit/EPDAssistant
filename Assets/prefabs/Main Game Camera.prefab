@@ -100,6 +100,8 @@ MonoBehaviour:
   mouseZoomScale: 1
   touchZoomScale: 1
   smoothTime: 0.5
+  minCameraScale: 1
+  maxCameraScale: 5
 --- !u!124 &124483236406798136
 Behaviour:
   m_ObjectHideFlags: 1
