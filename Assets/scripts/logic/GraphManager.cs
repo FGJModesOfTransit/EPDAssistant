@@ -29,6 +29,15 @@ public class GraphManager : MonoBehaviour
     {
         return m_Connections[n1];
     }
+
+	public Connection GetConnection(Node n1, Node n2)
+	{
+		foreach (Connection c in m_Connections[n1]) {
+			if (c.OtherEnd (n1) == n2) {
+				return c;
+			}
+		}
+	}
 		
     // Called from the editor to set up a connection 
     public void CreateConnection(GameObject connObj, Node n1, Node n2, ConnectionType type)

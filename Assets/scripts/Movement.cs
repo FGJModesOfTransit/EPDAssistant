@@ -95,6 +95,8 @@ public class Movement : MonoBehaviour
 		route_.RemoveAt (0);
 
 		//TODO: get route speed
+//		Connection conn = manager
+
 		float routeSpeed = 1.0f;
 		id = LeanTween.move(gameObject, nextNode.gameObject.transform, routeSpeed).id;
 		LTDescr d = LeanTween.descr( id );
@@ -115,9 +117,10 @@ public class Movement : MonoBehaviour
 		}
 		moveNext ();
 	}
-	/*
+
 	Connection GetConnections(Node n1, Node n2)
 	{
 		
-	}*/
+		
+	}
 }
