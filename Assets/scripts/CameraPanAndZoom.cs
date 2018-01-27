@@ -35,6 +35,11 @@ public class CameraPanAndZoom : MonoBehaviour
 	[SerializeField]
 	private float maxCameraScale = 5f;
 
+	[SerializeField]
+	private Vector2 minBounds;
+	[SerializeField]
+	private Vector2 maxBounds;
+
 	private bool dragging = false;
 
 	private Camera gameCamera;
@@ -132,6 +137,8 @@ public class CameraPanAndZoom : MonoBehaviour
 		if (dragging) 
 		{
 			var newPos = origin - difference;
+			newPos.x = Mathf.Clamp (newPos.x, minBounds.x, maxBounds.x);
+			newPos.y = Mathf.Clamp (newPos.y, minBounds.y, maxBounds.y);
 			velocity = newPos - transform.position;
 			transform.position = newPos;
 		}
@@ -171,7 +178,12 @@ public class CameraPanAndZoom : MonoBehaviour
 	{
 		if (underInertia && time <= smoothTime) 
 		{
-			transform.position += velocity;
+			var newPos = transform.position + velocity;
+			newPos.x = Mathf.Clamp (newPos.x, minBounds.x, maxBounds.x);
+			newPos.y = Mathf.Clamp (newPos.y, minBounds.y, maxBounds.y);
+
+			transform.position = newPos;
+
 			velocity = Vector3.Lerp (velocity, Vector3.zero, time);
 			time += Time.smoothDeltaTime;
 		} 
