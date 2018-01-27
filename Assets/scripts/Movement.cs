@@ -7,6 +7,9 @@ public class Movement : MonoBehaviour
 {
 	public static event System.Action<GameObject, Node> OnMovementComplete;
 
+	public static Movement PlayerCharacter { get; private set; }
+
+	public Node CurrentNode { get { return currentNode_; }}
 	private Node currentNode_ = null;
 	bool moving_ = false;
 
@@ -17,8 +20,20 @@ public class Movement : MonoBehaviour
 	List<Node> highlighted_ = new List<Node> ();
 
 	int id = 0;
-	// Use this for initialization
-	void Start () {
+
+	void OnEnable()
+	{
+		PlayerCharacter = this;
+		DiseaseManager.OnWaveCompleted += DiseaseManager_OnWaveCompleted;
+	}
+
+	void OnDisable()
+	{
+		DiseaseManager.OnWaveCompleted -= DiseaseManager_OnWaveCompleted;
+	}
+
+	void Start () 
+	{
 		graph_ = GameObject.Find ("GraphManager").GetComponent<GraphManager> ();
 		currentNode_ = graph_.GetRandomNode ();
 		transform.position = currentNode_.transform.position;
@@ -121,5 +136,11 @@ public class Movement : MonoBehaviour
 			OnMovementComplete(gameObject, currentNode_);
 		}
 		moveNext ();
+	}
+
+	void DiseaseManager_OnWaveCompleted (int wave)
+	{
+		disableHighlighted();
+		highlightNeighbours();
 	}
 }

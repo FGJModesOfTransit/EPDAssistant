@@ -66,6 +66,11 @@ public class Connection : MonoBehaviour
     {
     }
 
+	void Awake()
+	{
+		m_Sprite = GetComponent<SpriteRenderer> ();
+	}
+
     private void Update()
     {
         if ( !Application.isPlaying )
@@ -74,7 +79,10 @@ public class Connection : MonoBehaviour
         }
         else
         {
-
+			if (m_Sprite && m_Node1 && m_Node2)
+			{
+				m_Sprite.enabled = m_Node1.gameObject.activeInHierarchy && m_Node2.gameObject.activeInHierarchy;
+			}
         }
     }
 
