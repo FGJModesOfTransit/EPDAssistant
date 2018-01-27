@@ -16,6 +16,7 @@ public class Connection : MonoBehaviour
     public Node m_Node1, m_Node2;
     public ConnectionType m_Type;
     public float Width = 5;
+  	public float TravelTime = 1.0f;
 
     private SpriteRenderer m_Sprite;
 

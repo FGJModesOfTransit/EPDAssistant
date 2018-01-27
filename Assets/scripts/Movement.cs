@@ -19,11 +19,13 @@ public class Movement : MonoBehaviour
 	int id = 0;
 	// Use this for initialization
 	void Start () {
-		highlightNeighbours ();
-
 		graph_ = GameObject.Find ("GraphManager").GetComponent<GraphManager> ();
 		currentNode_ = graph_.GetRandomNode ();
 		transform.position = currentNode_.transform.position;
+
+		Debug.Log ("Set starting position to: " + currentNode_.name, currentNode_);
+
+		highlightNeighbours ();
 	}
 		
 	public void AddTarget(Node target)
@@ -98,6 +100,7 @@ public class Movement : MonoBehaviour
 
 		//TODO: get route speed
 //		Connection conn = manager
+		//Connection conn = graph_.GetConnection();
 
 		float routeSpeed = 1.0f;
 		id = LeanTween.move(gameObject, nextNode.gameObject.transform, routeSpeed).id;
@@ -119,10 +122,4 @@ public class Movement : MonoBehaviour
 		}
 		moveNext ();
 	}
-
-/*	Connection GetConnections(Node n1, Node n2)
-	{
-		
-		
-	}*/
 }
