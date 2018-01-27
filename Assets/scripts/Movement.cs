@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour {
+public class Movement : MonoBehaviour 
+{
+	public static event System.Action<GameObject, Node> OnMovementComplete;
 
 	public Node currentNode_ = null;
 	bool moving_ = false;
@@ -21,11 +23,7 @@ public class Movement : MonoBehaviour {
 		}
 		highlightNeighbours ();
 	}
-
-	// Update is called once per frame
-	void Update () {
-	}
-
+		
 	public void AddTarget(Node target)
 	{
 		// assumes always legal
@@ -95,10 +93,19 @@ public class Movement : MonoBehaviour {
 
 		if(d!=null){ // if the tween has already finished it will return null
 			// change some parameters
-			d.setOnComplete( moveNext );
+			d.setOnComplete( HandleMovementComplete );
 		}
 
 		currentNode_ = nextNode;
+	}
+
+	private void HandleMovementComplete()
+	{
+		if (OnMovementComplete != null) 
+		{
+			OnMovementComplete(gameObject, route_ [0]);
+		}
+		moveNext ();
 	}
 	/*
 	Connection GetConnections(Node n1, Node n2)
