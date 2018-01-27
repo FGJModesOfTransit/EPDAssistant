@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Node
+  - Connection
   layers:
   - Default
   - TransparentFX
@@ -43,4 +45,7 @@ TagManager:
     locked: 0
   - name: Map
     uniqueID: 331694901
+    locked: 0
+  - name: NodeSelection
+    uniqueID: 1297850909
     locked: 0

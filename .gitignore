@@ -1,3 +1,14 @@
+.DS_Store
+Temp
+*.pidb
+build
+*.csproj
+*.sln
+*.unityproj
+Library/
+Builds/
+obj/
+*.suo
 Library
 /UnityPackageManager/manifest.json
 Temp
