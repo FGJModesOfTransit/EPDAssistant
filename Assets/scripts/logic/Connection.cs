@@ -40,6 +40,9 @@ public class Connection : MonoBehaviour
 
 		public Node OtherEnd(Node node) 
 		{
+		if (m_Node1 == null || m_Node2 == null) {
+			Debug.LogError ("null poister in connection");
+		}
 			if (m_Node1 != node)
 				return m_Node1;
 

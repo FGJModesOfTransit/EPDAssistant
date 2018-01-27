@@ -73,17 +73,18 @@ public class Movement : MonoBehaviour
 			target = currentNode_;
 		}
 
-		if (target != null) 
-		{
+		if (target != null) {
 			Debug.Log ("Target node:" + target.name, target);
 			var conns = graph_.GetConnections (target);
-			foreach (Connection c in conns) 
-			{
+			foreach (Connection c in conns) {
 				Node high = c.OtherEnd (target);
-				high.IsSelectable = true;
-				highlighted_.Add(high);
 				Debug.Log ("Highligting node:" + high.name, high);
+				high.IsSelectable = true;
+				highlighted_.Add (high);
+
 			}
+		} else {
+			Debug.LogError ("Current node was NULL");
 		}
 	}
 		
@@ -100,9 +101,9 @@ public class Movement : MonoBehaviour
 
 		//TODO: get route speed
 //		Connection conn = manager
-		//Connection conn = graph_.GetConnection();
+		Connection conn = graph_.GetConnection(currentNode_, nextNode);
 
-		float routeSpeed = 1.0f;
+		float routeSpeed = conn.TravelTime;
 		id = LeanTween.move(gameObject, nextNode.gameObject.transform, routeSpeed).id;
 		LTDescr d = LeanTween.descr( id );
 
