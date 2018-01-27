@@ -35,10 +35,15 @@ public class GraphManager : MonoBehaviour
     // Called from the editor to set up a connection 
     public void CreateConnection(GameObject connObj, Node n1, Node n2, ConnectionType type)
     {
-        connObj.transform.SetParent(this.transform);
+        //connObj.transform.SetParent(this.transform);
         Connection c = connObj.GetComponent<Connection>();
         c.Set(n1, n2, type);
         c.gameObject.name = "Connection " + n1.gameObject.name + " to " + n2.gameObject.name;
+    }
+
+    public Node[] GetNodes()
+    {
+        return m_Nodes;
     }
 
     public Node GetRandomNode()
