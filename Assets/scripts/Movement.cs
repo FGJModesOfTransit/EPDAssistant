@@ -11,6 +11,8 @@ public class Movement : MonoBehaviour
 
 	public Node CurrentNode { get { return currentNode_; }}
 	private Node currentNode_ = null;
+    private Node prevNode_ = null;
+    
 	bool moving_ = false;
 
 	GraphManager graph_ = null;
@@ -60,8 +62,16 @@ public class Movement : MonoBehaviour
 
 		} else if (route_.Count > 0 && target == route_ [route_.Count - 1]) {
 			Debug.Log ("Removing a node from route");
-			route_.RemoveAt (route_.Count - 1);
-		} else {
+            if (route_.Count >= 2)
+            {
+                GraphManager.Instance.GetConnection(route_[route_.Count - 2], route_[route_.Count - 1]).SetOnPath(false, false);
+            }
+            route_.RemoveAt (route_.Count - 1);
+		} else
+        {
+            Node prev = route_.Count > 0 ? route_[route_.Count-1] : currentNode_;
+            Connection conn = GraphManager.Instance.GetConnection(prev, target);
+            conn.SetOnPath(true, conn.m_Node1 == target);
 			route_.Add (target);
 		}
 
@@ -105,20 +115,32 @@ public class Movement : MonoBehaviour
 		
 	void moveNext()
 	{
-		if (route_.Count == 0) {
+		if (route_.Count == 0)
+        {
 			Debug.Log ("Route finished");
-			moving_ = false;
+            if (prevNode_ != null)
+            {
+                graph_.GetConnection(prevNode_, currentNode_).SetOnPath(false, false);
+            }
+            moving_ = false;
 			return;
 		}
 		moving_ = true;
 		Node nextNode = route_ [0];
-		route_.RemoveAt (0);
+        route_.RemoveAt(0);
 
 		Connection conn = graph_.GetConnection(currentNode_, nextNode);
+        conn.SetOnPath(true, conn.m_Node2 == currentNode_);
 
-		float routeSpeed = conn.TravelTime;
+		float routeSpeed = conn.TravelTime * 
+			Vector2.Distance(currentNode_.gameObject.transform.position, 
+		  nextNode.gameObject.transform.position);
 		Debug.Log("Setting travel time to: " + routeSpeed);
-		id = LeanTween.move(gameObject, nextNode.gameObject.transform, routeSpeed).id;
+		if (conn.m_Type == ConnectionType.Path) {
+			id = LeanTween.move (gameObject, nextNode.gameObject.transform, routeSpeed).setEase (LeanTweenType.linear).id;
+		} else {
+			id = LeanTween.move (gameObject, nextNode.gameObject.transform, routeSpeed).setEase (LeanTweenType.easeInOutSine).id;
+		}
 		LTDescr d = LeanTween.descr( id );
 
 		if(d!=null){ // if the tween has already finished it will return null
@@ -126,6 +148,11 @@ public class Movement : MonoBehaviour
 			d.setOnComplete( HandleMovementComplete );
 		}
 
+        if (prevNode_ != null)
+        {
+            graph_.GetConnection(prevNode_, currentNode_).SetOnPath(false, false);
+        }
+        prevNode_ = currentNode_;
 		currentNode_ = nextNode;
 	}
 
