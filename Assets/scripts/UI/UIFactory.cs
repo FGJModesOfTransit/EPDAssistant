@@ -9,6 +9,8 @@ public class UIFactory : MonoBehaviour
 
 	void Awake()
 	{
+		Application.targetFrameRate = 60;
+
 		foreach (var prefab in requiredPrefabs) 
 		{
 			Instantiate (prefab);
