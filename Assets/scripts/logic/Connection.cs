@@ -16,7 +16,7 @@ public class Connection : MonoBehaviour
     public Node m_Node1, m_Node2;
     public ConnectionType m_Type;
 
-    public Connection(Node n1, Node n2, ConnectionType type)
+    public void Set(Node n1, Node n2, ConnectionType type)
     {
         m_Node1 = n1;
         m_Node2 = n2;
