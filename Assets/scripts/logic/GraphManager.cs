@@ -30,6 +30,8 @@ public class GraphManager : MonoBehaviour
         return m_Connections[n1];
     }
 
+//	dgdfgdfgdf
+	/*
 	public Connection GetConnection(Node n1, Node n2)
 	{
 		foreach (Connection c in m_Connections[n1]) {
@@ -37,7 +39,7 @@ public class GraphManager : MonoBehaviour
 				return c;
 			}
 		}
-	}
+	}*/
 		
     // Called from the editor to set up a connection 
     public void CreateConnection(GameObject connObj, Node n1, Node n2, ConnectionType type)
