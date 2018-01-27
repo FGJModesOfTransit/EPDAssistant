@@ -7,7 +7,7 @@ public class Movement : MonoBehaviour {
 	public GameObject currentNode_ = null;
 	bool moving_ = false;
 
-	GraphManager graph_ = null;
+	public GraphManager graph_ = null;
 
 	List<GameObject> route_ = new List<GameObject> ();
 
