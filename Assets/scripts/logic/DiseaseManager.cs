@@ -113,7 +113,7 @@ public class DiseaseManager : MonoBehaviour
 
     private void NextWave()
     {
-		if (m_CurrentWave > 0 && OnWaveCompleted != null) 
+		if (m_CurrentWave >= 0 && OnWaveCompleted != null) 
 		{
 			OnWaveCompleted(m_CurrentWave);
 		}

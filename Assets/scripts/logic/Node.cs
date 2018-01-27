@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class Node : MonoBehaviour
 {
@@ -59,7 +62,7 @@ public class Node : MonoBehaviour
         { return m_Lost; }
     }
 
-	void Start()
+	void Awake()
 	{
 		if (level > 0) 
 		{
@@ -83,7 +86,11 @@ public class Node : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        //Gizmos.color = Color.red;
-        //Gizmos.DrawSphere(transform.position, 1f);
+#if UNITY_EDITOR
+        GUIStyle style = new GUIStyle();
+        style.normal.textColor = Color.black;
+
+        Handles.Label(transform.position + 1f * Vector3.up, name + "(" + level + ")", style);
+#endif
     }
 }

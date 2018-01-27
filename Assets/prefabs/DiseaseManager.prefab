@@ -107,6 +107,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39f6e32016bf1854591639f320031aa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  creationEffectPrefab: {fileID: 0}
+  healingEffectPrefab: {fileID: 0}
+  doneEffectPrefab: {fileID: 0}
   ImagePrefab: {fileID: 114356243335669764, guid: 388a082e37d38544baec9c5502b93da0,
     type: 2}
   DiseaseColor:
@@ -141,10 +144,22 @@ MonoBehaviour:
   Waves:
   - diseaseTimes:
     - 1
+  - diseaseTimes:
+    - 1
     - 5
+    - 15
+  - diseaseTimes:
+    - 1
+    - 5
+    - 8
+    - 18
+    - 28
+    - 40
+    - 45
+    - 49
   TimeBetweenWaves: 3
-  GrowthSpeed: 0.0006
-  SpreadDelay: 200
+  GrowthSpeed: 0.0004
+  SpreadDelay: 300
 --- !u!223 &223467189210867082
 Canvas:
   m_ObjectHideFlags: 1
