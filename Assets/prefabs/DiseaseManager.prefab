@@ -115,6 +115,7 @@ MonoBehaviour:
     type: 2}
   spreadEffectPrefab: {fileID: 1577962676635744, guid: 64213fae6a55b454b839fa928ab3d4b9,
     type: 2}
+  healProtectionTime: 10
   ImagePrefab: {fileID: 114356243335669764, guid: 388a082e37d38544baec9c5502b93da0,
     type: 2}
   DiseaseColor:
@@ -148,21 +149,47 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   Waves:
   - diseaseTimes:
-    - 1
+    - 8
   - diseaseTimes:
-    - 1
     - 5
+    - 9
     - 15
   - diseaseTimes:
-    - 1
     - 5
-    - 14
+    - 9
+    - 15
+    - 21
+    - 23
+  - diseaseTimes:
+    - 3
+    - 7
+    - 10
+    - 17
     - 25
+    - 27
+    - 31
+  - diseaseTimes:
+    - 3
+    - 6
+    - 9
+    - 16
+    - 22
+    - 26
+    - 28
+    - 33
+  - diseaseTimes:
+    - 2
+    - 4
+    - 6
+    - 13
+    - 14
+    - 17
+    - 24
+    - 29
     - 32
-    - 38
-  TimeBetweenWaves: 3
-  GrowthSpeed: 0.0004
-  SpreadDelay: 300
+  TimeBetweenWaves: 4
+  GrowthSpeed: 0.0003
+  SpreadDelay: 150
 --- !u!223 &223467189210867082
 Canvas:
   m_ObjectHideFlags: 1
