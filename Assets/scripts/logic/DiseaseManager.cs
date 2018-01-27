@@ -14,6 +14,7 @@ public class DiseaseManager : MonoBehaviour
 {
     private enum State
     {
+		Initializing,
         Waiting,
         InWave
     }
@@ -121,10 +122,16 @@ public class DiseaseManager : MonoBehaviour
 		}
 	}
 
-    private void Start()
+	private IEnumerator Start()
     {
+		m_CurrentWave = -1;
+
+		m_State = State.Initializing;
+
+		yield return new WaitForSeconds (10);
+
         Debug.Log("Starting game");
-        m_CurrentWave = -1;
+
         NextWave();
     }
 
@@ -175,7 +182,7 @@ public class DiseaseManager : MonoBehaviour
 		{
 			var position = n.transform.position;
 
-			MessageManager.Instance.AddMessage("Outbreak detected at\nX:" + n.transform.position.x + ", Y:" + n.transform.position.y,
+			MessageManager.Instance.AddMessage("Outbreak detected at\n[Locate]",
 				() => CameraPanAndZoom.Instance.GoToPoint(position));
 		}
 
@@ -308,9 +315,13 @@ public class DiseaseManager : MonoBehaviour
 
 		deseaseSpeedMultiplier *= 1.1f;
 
-		pastInflicted += Mathf.FloorToInt(disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation);
+		var node = disease.GetComponentInParent<Node> ();
+		pastInflicted += Mathf.FloorToInt(disease.progress * (float)node.CurrentPopulation);
+		pastInflicted += node.CurrentPopulation;
 
-		MessageManager.Instance.AddMessage("Uncontrolled outbreak! Quarantine issued\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
+		var position = disease.transform.position;
+		MessageManager.Instance.AddMessage("Uncontrolled outbreak! Quarantine issued\n[Locate]",
+			() => CameraPanAndZoom.Instance.GoToPoint(position));
 
 		diseases.Remove(disease);
 
