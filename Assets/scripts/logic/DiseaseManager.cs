@@ -15,6 +15,7 @@ public class DiseaseManager : MonoBehaviour
 {
     private enum State
     {
+		Initializing,
         Waiting,
         InWave
     }
@@ -38,7 +39,11 @@ public class DiseaseManager : MonoBehaviour
     public Gradient DiseaseColor;
     public DiseaseWave[] Waves;
     public float TimeBetweenWaves;
-    public float GrowthSpeed;
+
+	[SerializeField]
+	private float growthSpeed = 0.0003f;
+	public float GrowthSpeed { get { return growthSpeed * deseaseSpeedMultiplier; }}
+
     public int SpreadDelay;
 
 	public static event Action<Node, Disease> OnDiseaseAdded;
@@ -53,6 +58,8 @@ public class DiseaseManager : MonoBehaviour
 	private List<Disease> diseases = new List<Disease>();
 
 	private int pastInflicted = 0;
+
+	private float deseaseSpeedMultiplier = 1;
 
     public static DiseaseManager Instance
     {
@@ -116,10 +123,16 @@ public class DiseaseManager : MonoBehaviour
 		}
 	}
 
-    private void Start()
+	private IEnumerator Start()
     {
+		m_CurrentWave = -1;
+
+		m_State = State.Initializing;
+
+		yield return new WaitForSeconds (10);
+
         Debug.Log("Starting game");
-        m_CurrentWave = -1;
+
         NextWave();
     }
 
@@ -144,11 +157,11 @@ public class DiseaseManager : MonoBehaviour
 			
 		if (m_CurrentWave == 0) 
 		{
-			MessageManager.Instance.AddMessage ("A pathogen detect! Please advice!");
+			MessageManager.Instance.AddMessage ("A pathogen detected! Please advice!");
 		}
 		else 
 		{
-			MessageManager.Instance.AddMessage ("New pathogen detect! Prepare for wave " + (1 + m_CurrentWave));
+			MessageManager.Instance.AddMessage ("New pathogen detected! Prepare for wave " + (1 + m_CurrentWave));
 		}
     }
 
@@ -170,7 +183,7 @@ public class DiseaseManager : MonoBehaviour
 		{
 			var position = n.transform.position;
 
-			MessageManager.Instance.AddMessage("Outbreak detected at\nX:" + n.transform.position.x + ", Y:" + n.transform.position.y,
+			MessageManager.Instance.AddMessage("Outbreak detected!\n[Locate]",
 				() => CameraPanAndZoom.Instance.GoToPoint(position));
 		}
 
@@ -301,9 +314,15 @@ public class DiseaseManager : MonoBehaviour
 			Instantiate (doneEffectPrefab, disease.transform.position, Quaternion.identity);
 		}
 
-		pastInflicted += Mathf.FloorToInt(disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation);
+		deseaseSpeedMultiplier *= 1.1f;
 
-		MessageManager.Instance.AddMessage("Uncontrolled outbreak! Quarantine issued\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
+		var node = disease.GetComponentInParent<Node> ();
+		pastInflicted += Mathf.FloorToInt(disease.progress * (float)node.CurrentPopulation);
+		pastInflicted += node.CurrentPopulation;
+
+		var position = disease.transform.position;
+		MessageManager.Instance.AddMessage("Uncontrolled outbreak! Quarantine issued\n[Locate]",
+			() => CameraPanAndZoom.Instance.GoToPoint(position));
 
 		diseases.Remove(disease);
 

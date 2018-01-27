@@ -12,6 +12,16 @@ public class Movement : MonoBehaviour
 	public Node CurrentNode { get { return currentNode_; }}
 	private Node currentNode_ = null;
     private Node prevNode_ = null;
+
+	[SerializeField]
+	private Sprite carSprite;
+	[SerializeField]
+	private Sprite bikeSprite;
+	[SerializeField]
+	private Sprite trainSprite;
+
+	[SerializeField]
+	private SpriteRenderer vehicleRenderer;
     
 	bool moving_ = false;
 
@@ -41,6 +51,8 @@ public class Movement : MonoBehaviour
 		transform.position = currentNode_.transform.position;
 
 		Debug.Log ("Set starting position to: " + currentNode_.name, currentNode_);
+
+		vehicleRenderer.sprite = bikeSprite;
 
 		highlightNeighbours ();
 	}
@@ -210,6 +222,19 @@ public class Movement : MonoBehaviour
         prevNode_ = currentNode_;
 		currentNode_ = nextNode;
 
+		switch (conn.m_Type) 
+		{
+		case ConnectionType.Path:
+			vehicleRenderer.sprite = bikeSprite;
+			break;
+		case ConnectionType.Railway:
+			vehicleRenderer.sprite = trainSprite;
+			break;
+		case ConnectionType.Road:
+			vehicleRenderer.sprite = carSprite;
+			break;
+		}
+			
 		disableHighlighted ();
 		highlightRoute ();
 		highlightNeighbours ();
