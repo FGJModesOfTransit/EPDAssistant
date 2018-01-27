@@ -12,6 +12,7 @@ public class Movement : MonoBehaviour {
 	int id = 0;
 	// Use this for initialization
 	void Start () {
+		EnableAllowedMovement ();
 	}
 	
 	// Update is called once per frame
@@ -32,15 +33,27 @@ public class Movement : MonoBehaviour {
 			route_.Add (target);
 			if (!moving_) {
 				moveNext ();
+			} else if (route_.Count > 0 && target == route_ [route_.Count - 1]) {
+
+				//route_.RemoveAt (route_.Count - 1);
 			}
+				
+			EnableAllowedMovement ();
 		}
+	}
+
+	void EnableAllowedMovement()
+	{
+		// disable all
+		// then enable all allowed
 	}
 
 
 	void moveNext()
 	{
+		
 		if (route_.Count == 0) {
-			Debug.Log ("ROute finished");
+			Debug.Log ("Route finished");
 			moving_ = false;
 			return;
 		}
