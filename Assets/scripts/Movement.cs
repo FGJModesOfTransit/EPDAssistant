@@ -105,7 +105,11 @@ public class Movement : MonoBehaviour
 			Vector2.Distance(currentNode_.gameObject.transform.position, 
 		  nextNode.gameObject.transform.position);
 		Debug.Log("Setting travel time to: " + routeSpeed);
-		id = LeanTween.move(gameObject, nextNode.gameObject.transform, routeSpeed).id;
+		if (conn.m_Type == ConnectionType.Path) {
+			id = LeanTween.move (gameObject, nextNode.gameObject.transform, routeSpeed).setEase (LeanTweenType.linear).id;
+		} else {
+			id = LeanTween.move (gameObject, nextNode.gameObject.transform, routeSpeed).setEase (LeanTweenType.easeInOutSine).id;
+		}
 		LTDescr d = LeanTween.descr( id );
 
 		if(d!=null){ // if the tween has already finished it will return null
