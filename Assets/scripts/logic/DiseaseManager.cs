@@ -134,15 +134,18 @@ public class DiseaseManager : MonoBehaviour
     public bool AddDisease()
     {
 		Node n = GraphManager.Instance.GetRandomNode();
-		while (Movement.PlayerCharacter != null && n == Movement.PlayerCharacter.CurrentNode) 
-		{
+		//while (Movement.PlayerCharacter != null && n == Movement.PlayerCharacter.CurrentNode) 
+		//{
 			n = GraphManager.Instance.GetRandomNode(); 
-		}
+		//}
         return AddDisease(n);
     }
 
     public bool AddDisease(Node n)
-    { 
+    {
+        if (n.Lost) return false;
+        if (Movement.PlayerCharacter != null && n == Movement.PlayerCharacter.CurrentNode) return false;
+
         Disease disease = n.GetComponent<Disease>();
 		if (disease == null)
         {

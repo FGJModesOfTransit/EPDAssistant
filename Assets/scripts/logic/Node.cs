@@ -8,6 +8,7 @@ public class Node : MonoBehaviour
 
 	[SerializeField]
 	private int initialPopulation = 100;
+    private bool m_Lost;
 
 	public int CurrentPopulation
 	{ get { return initialPopulation; } }
@@ -40,6 +41,23 @@ public class Node : MonoBehaviour
 			}
 		}
 	}
+
+    public void SetLost()
+    {
+        m_Lost = true;
+        Transform imTrs = transform.Find("NodeGraphic");
+        if ( imTrs != null )
+        {
+            var sprite = imTrs.gameObject.GetComponent<SpriteRenderer>();
+            if (sprite != null) sprite.color = Color.red;
+        }
+    }
+
+    public bool Lost
+    {
+        get
+        { return m_Lost; }
+    }
 
 	void Start()
 	{
