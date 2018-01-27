@@ -19,8 +19,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4962554737229812}
-  - component: {fileID: 114208560099213626}
   - component: {fileID: 212388886704398496}
+  - component: {fileID: 114439440617206472}
   m_Layer: 0
   m_Name: Node
   m_TagString: Node
@@ -35,13 +35,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1523612443454966}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.98564756, y: -1.2567002, z: -1}
+  m_LocalPosition: {x: -17.67, y: 8.48, z: -1}
   m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114208560099213626
+--- !u!114 &114439440617206472
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -52,8 +52,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a30cd2f268e78c642ba1fbcd0168ca06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectionPrefab: {fileID: 1047918097971344, guid: 29a12df49542945db9b031891f588fa1,
-    type: 2}
 --- !u!212 &212388886704398496
 SpriteRenderer:
   m_ObjectHideFlags: 1
