@@ -37,7 +37,11 @@ public class DiseaseManager : MonoBehaviour
     public Gradient DiseaseColor;
     public DiseaseWave[] Waves;
     public float TimeBetweenWaves;
-    public float GrowthSpeed;
+
+	[SerializeField]
+	private float growthSpeed = 0.0003f;
+	public float GrowthSpeed { get { return growthSpeed * deseaseSpeedMultiplier; }}
+
     public int SpreadDelay;
 
 	public static event Action<Node, Disease> OnDiseaseAdded;
@@ -52,6 +56,8 @@ public class DiseaseManager : MonoBehaviour
 	private List<Disease> diseases = new List<Disease>();
 
 	private int pastInflicted = 0;
+
+	private float deseaseSpeedMultiplier = 1;
 
     public static DiseaseManager Instance
     {
@@ -299,6 +305,8 @@ public class DiseaseManager : MonoBehaviour
 		{
 			Instantiate (doneEffectPrefab, disease.transform.position, Quaternion.identity);
 		}
+
+		deseaseSpeedMultiplier *= 1.1f;
 
 		pastInflicted += Mathf.FloorToInt(disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation);
 
