@@ -10,6 +10,12 @@ public class Disease : MonoBehaviour
 
     private Image m_Image;
 
+    public void Remove()
+    {
+        Destroy(m_Image.gameObject);
+        Destroy(this);
+    }
+
     void Start ()
     {
         m_Image = DiseaseManager.Instance.CreateDiseaseImage();
