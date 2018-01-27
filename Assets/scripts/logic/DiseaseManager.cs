@@ -74,19 +74,19 @@ public class DiseaseManager : MonoBehaviour
         m_WaveTimer = 0f;
         if ( m_CurrentWave == Waves.Length )
         {
-            MessageManager.Instance.AddMessage("Congratulations!");
+            MessageManager.Instance.AddMessage("Congratulations! No more disease!");
             Debug.Log("Congrats");
             gameObject.SetActive(false);
             return;
         }
 
-        MessageManager.Instance.AddMessage("Starting wave " + m_CurrentWave);
+        MessageManager.Instance.AddMessage("Starting wave " + (1+m_CurrentWave) );
         Debug.Log("starting wave " + m_CurrentWave);
     }
 
     private void EndWave()
     {
-        MessageManager.Instance.AddMessage("Wave " + m_CurrentWave + " complete!");
+        MessageManager.Instance.AddMessage("Wave " + (1+m_CurrentWave) + " complete!");
         Debug.Log("wave " + m_CurrentWave + " complete");
         m_WaveTimer = 0f;
         m_State = State.Waiting;
@@ -110,6 +110,20 @@ public class DiseaseManager : MonoBehaviour
         return false;
     }
 
+    public void DebugHealAll()
+    {
+        int count = 0;
+        var nodes = GraphManager.Instance.GetNodes();
+        for (int i = 0; i < nodes.Length; ++i)
+        {
+            Disease d = nodes[i].GetComponent<Disease>();
+            if ( d != null)
+            {
+                d.Remove();
+            }
+        }
+    }
+
     public int CountSickNodes()
     {
         int count = 0;
@@ -126,8 +140,12 @@ public class DiseaseManager : MonoBehaviour
 
 	void Update ()
     {
-        //Debug.Log("Bblaa");
-        //MessageManager.Instance.AddMessage("GAERGERA" + m_WaveTimer);
+        /*
+        if ( Input.GetKeyDown(KeyCode.H) )
+        {
+            Debug.Log("Healing all");
+            DebugHealAll();
+        }*/
 
         m_WaveTimer += Time.deltaTime;
 
