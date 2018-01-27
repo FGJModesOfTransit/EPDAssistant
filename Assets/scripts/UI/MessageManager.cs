@@ -50,21 +50,7 @@ public class MessageManager : MonoBehaviour
 	void Awake()
 	{
 		canvas = GetComponent<Canvas> ();
-	}
-
-	void OnEnable()
-	{
-		DiseaseManager.OnDiseaseAdded += HandleDiseaseAdded;
-	}
-
-	void OnDisable()
-	{
-		DiseaseManager.OnDiseaseAdded -= HandleDiseaseAdded;	
-	}
-
-	private void HandleDiseaseAdded(Node node, Disease disease)
-	{
-		AddMessage ("New outbreak detected\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
+		LeanTween.init();
 	}
 
 	public void AddMessage(string content, Action action = null)
@@ -81,7 +67,7 @@ public class MessageManager : MonoBehaviour
 
 	void Update()
 	{
-		if (currentMessage != null && !currentMessage.Complete) 
+		if (Time.time > 0.5f && currentMessage != null && !currentMessage.Complete) 
 		{
 			currentMessage.TimeToLive -= Time.deltaTime;
 
@@ -105,7 +91,8 @@ public class MessageManager : MonoBehaviour
 		{
 			currentMessage.Complete = true;
 
-			LeanTween.moveY (messagePanel.GetComponent<RectTransform> (), 64 * canvas.scaleFactor, 0.2f)
+			LeanTween.cancel(messagePanel.gameObject);
+			LeanTween.moveY(messagePanel.GetComponent<RectTransform> (), 64 * canvas.scaleFactor, 0.2f)
 				.setEase (LeanTweenType.easeInCubic)
 				.setOnComplete(() => ShowNextMessage());
 		}
@@ -122,6 +109,7 @@ public class MessageManager : MonoBehaviour
 			}
 			messagePanelText.text = currentMessage.Content;
 
+			LeanTween.cancel (messagePanel.gameObject);
 			LeanTween.moveY(messagePanel.GetComponent<RectTransform>(), 0, 0.2f)
 				.setEase (LeanTweenType.easeInCirc);
 		}
