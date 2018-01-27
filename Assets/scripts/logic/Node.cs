@@ -15,6 +15,8 @@ public class Node : MonoBehaviour
 
 	public int level = 0;
 
+	public bool OnRoute = false;
+
 	private bool isSelectable;
 	public bool IsSelectable
 	{
