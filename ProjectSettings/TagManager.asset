@@ -46,6 +46,9 @@ TagManager:
   - name: Map
     uniqueID: 331694901
     locked: 0
+  - name: Map2
+    uniqueID: 3869529213
+    locked: 0
   - name: NodeSelection
     uniqueID: 1297850909
     locked: 0
