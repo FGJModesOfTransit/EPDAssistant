@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4853673364929934}
   - component: {fileID: 212121542774239630}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Pointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,7 +81,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1670396732998006}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.4160001, y: -3.8, z: 0}
+  m_LocalPosition: {x: 0.016, y: 0.096, z: 0}
   m_LocalScale: {x: 0.52800006, y: 0.52800006, z: 1}
   m_Children: []
   m_Father: {fileID: 4853673364929934}
@@ -112,6 +112,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 047fd6af47ca9de419d68af089193a0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  carSprite: {fileID: 21300000, guid: 4630d11efa0bada43bc57b9b47063682, type: 3}
+  bikeSprite: {fileID: 21300000, guid: 6b678bf63620e8842ae2d7c50efcf335, type: 3}
+  trainSprite: {fileID: 21300000, guid: 4630d11efa0bada43bc57b9b47063682, type: 3}
+  vehicleRenderer: {fileID: 212878233744728458}
 --- !u!114 &114306031000577260
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -123,6 +127,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 047fd6af47ca9de419d68af089193a0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  carSprite: {fileID: 0}
+  bikeSprite: {fileID: 0}
+  trainSprite: {fileID: 0}
+  vehicleRenderer: {fileID: 0}
 --- !u!212 &212121542774239630
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -201,7 +209,7 @@ SpriteRenderer:
   m_SortingLayerID: -845191851
   m_SortingLayer: 4
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 4630d11efa0bada43bc57b9b47063682, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6b678bf63620e8842ae2d7c50efcf335, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
