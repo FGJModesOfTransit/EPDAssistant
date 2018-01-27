@@ -86,7 +86,7 @@ MonoBehaviour:
   m_Node2: {fileID: 0}
   m_Type: 2
   Width: 1
-  TravelTime: 1
+  TravelTime: 0.8
 --- !u!212 &212025978966221108
 SpriteRenderer:
   m_ObjectHideFlags: 1
