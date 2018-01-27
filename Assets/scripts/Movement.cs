@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour {
+public class Movement : MonoBehaviour 
+{
+	public static event System.Action<GameObject, Node> OnMovementComplete;
 
 	public Node currentNode_ = null;
 	bool moving_ = false;
@@ -21,11 +23,7 @@ public class Movement : MonoBehaviour {
 		}
 		highlightNeighbours ();
 	}
-
-	// Update is called once per frame
-	void Update () {
-	}
-
+		
 	public void AddTarget(Node target)
 	{
 		// assumes always legal
@@ -54,7 +52,7 @@ public class Movement : MonoBehaviour {
 
 	void disableHighlighted()
 	{
-		Debug.Log ("Clearing" + highlighted_.Count + " nodes.");
+		Debug.Log ("Clearing " + highlighted_.Count + " nodes.");
 		foreach(Node n in highlighted_)
 		{
 			n.IsSelectable = false;
@@ -68,12 +66,15 @@ public class Movement : MonoBehaviour {
 		Node highlight = currentNode_;
 		if (route_.Count > 0) {
 			highlight = route_ [route_.Count - 1];
+			highlight.IsSelectable = true;
 		}
 		conns = graph_.GetConnections (highlight);
+		Debug.Log ("Highlighting ends of" + conns.Count + " connections");
 		foreach (Connection c in conns) {
 			Node high = c.OtherEnd (highlight);
 			high.IsSelectable = true;
 			highlighted_.Add(high);
+			Debug.Log ("Highligting node:" + high.name);
 		}
 	}
 
@@ -95,10 +96,19 @@ public class Movement : MonoBehaviour {
 
 		if(d!=null){ // if the tween has already finished it will return null
 			// change some parameters
-			d.setOnComplete( moveNext );
+			d.setOnComplete( HandleMovementComplete );
 		}
 
 		currentNode_ = nextNode;
+	}
+
+	private void HandleMovementComplete()
+	{
+		if (OnMovementComplete != null) 
+		{
+			OnMovementComplete(gameObject, currentNode_);
+		}
+		moveNext ();
 	}
 	/*
 	Connection GetConnections(Node n1, Node n2)

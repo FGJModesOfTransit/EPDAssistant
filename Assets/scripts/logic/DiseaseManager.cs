@@ -59,6 +59,28 @@ public class DiseaseManager : MonoBehaviour
         m_DiseaseCanvas = GameObject.Find("DiseaseCanvas").GetComponent<Canvas>();
 	}
 
+	void OnEnable()
+	{
+		Movement.OnMovementComplete += HandlePlayerArrivedAtNode;
+	}
+
+	void OnDisable()
+	{
+		Movement.OnMovementComplete -= HandlePlayerArrivedAtNode;
+	}
+
+	private void HandlePlayerArrivedAtNode(GameObject playerObject, Node node)
+	{
+		if (playerObject.tag == "Player") 
+		{
+			Disease d = node.GetComponent<Disease>();
+			if ( d != null)
+			{
+				d.Remove();
+			}
+		}
+	}
+
     private void Start()
     {
         Debug.Log("Starting game");
