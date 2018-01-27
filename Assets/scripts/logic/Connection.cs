@@ -15,13 +15,34 @@ public class Connection : MonoBehaviour
 {
     public Node m_Node1, m_Node2;
     public ConnectionType m_Type;
+    private SpriteRenderer m_Sprite;
+
+    ConnectionType Type
+    {
+        get { return m_Type; }
+        set { if ( m_Type != value )
+            {
+                m_Type = value;
+                m_Sprite = GetComponent<SpriteRenderer>();
+                m_Sprite.sprite = GraphManager.Instance.Sprites[(int)m_Type];
+            }
+        }
+    }
 
     public void Set(Node n1, Node n2, ConnectionType type)
     {
         m_Node1 = n1;
         m_Node2 = n2;
-        m_Type = type;
+        Type = type;
     }
+
+		public Node OtherEnd(Node node) 
+		{
+			if (m_Node1 != node)
+				return m_Node1;
+
+			return m_Node2;
+		}
 
     private void EditorUpdate()
     {
@@ -34,6 +55,10 @@ public class Connection : MonoBehaviour
                 Stretch(gameObject, m_Node1.transform.position, m_Node2.transform.position, false);
             }
         }
+    }
+
+    void OnEnable()
+    {
     }
 
     private void Update()

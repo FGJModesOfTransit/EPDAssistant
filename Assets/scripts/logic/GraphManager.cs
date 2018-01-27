@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +7,7 @@ public class GraphManager : MonoBehaviour
 {
     public GameObject ConnectionPrefab;
 
-    public Sprite[] RoadSprites;
+    public Sprite[] Sprites;
 
     public static GraphManager Instance
     {
@@ -31,8 +31,7 @@ public class GraphManager : MonoBehaviour
     {
         return m_Connections[n1];
     }
-
-
+		
     // Called from the editor to set up a connection 
     public void CreateConnection(GameObject connObj, Node n1, Node n2, ConnectionType type)
     {

@@ -6,5 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/scenes/daedev.unity
-    guid: 386fffccf29d24c4eafbdfadcf35d69c
+    path: Assets/scenes/signin.unity
+    guid: 4c47ed5a24a424e849a3d08934942041
+  - enabled: 1
+    path: Assets/scenes/UI.unity
+    guid: 1d5d0bac7069349a09b05417821b9696
