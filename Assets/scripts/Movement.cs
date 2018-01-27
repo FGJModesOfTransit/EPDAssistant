@@ -76,8 +76,8 @@ public class Movement : MonoBehaviour
 		}
 
 		disableHighlighted ();
-		highlightNeighbours ();
 		highlightRoute ();
+		highlightNeighbours ();
 	}
 
 	void disableHighlighted()
@@ -85,6 +85,7 @@ public class Movement : MonoBehaviour
 		Debug.Log ("Clearing " + highlighted_.Count + " nodes.");
 		foreach(Node n in highlighted_)
 		{
+			n.OnRoute = false;
 			n.IsSelectable = false;
 		}
 		highlighted_.Clear ();
@@ -92,8 +93,15 @@ public class Movement : MonoBehaviour
 
 	void highlightRoute()
 	{
+
+		Debug.Log ("Highligting current node on route:" + currentNode_.name, currentNode_);
+		currentNode_.OnRoute = true;
+		currentNode_.IsSelectable = true;
+		highlighted_.Add (currentNode_);
+
 		foreach (Node n in route_) {
 			Debug.Log ("Highligting route:" + n.name, n);
+			n.OnRoute = true;
 			n.IsSelectable = true;
 			highlighted_.Add (n);
 		}
@@ -113,10 +121,11 @@ public class Movement : MonoBehaviour
 			var conns = graph_.GetConnections (target);
 			foreach (Connection c in conns) {
 				Node high = c.OtherEnd (target);
-				Debug.Log ("Highligting node:" + high.name, high);
-				high.IsSelectable = true;
-				highlighted_.Add (high);
-
+				if (!high.OnRoute) {
+					Debug.Log ("Highligting node:" + high.name, high);
+					high.IsSelectable = true;
+					highlighted_.Add (high);
+				}
 			}
 		} else {
 			Debug.LogError ("Current node was NULL");

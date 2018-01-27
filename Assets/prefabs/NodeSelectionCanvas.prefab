@@ -64,6 +64,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionPrefab: {fileID: 1047918097971344, guid: 29a12df49542945db9b031891f588fa1,
     type: 2}
+  routePrefab: {fileID: 1734008524005324, guid: dcf66277e316d3a41a0f1de97b812f3e,
+    type: 2}
 --- !u!114 &114996689622486130
 MonoBehaviour:
   m_ObjectHideFlags: 1
