@@ -73,6 +73,7 @@ public class Movement : MonoBehaviour
 						}
 					}
 				}
+				route_.Clear ();
 			} else {
 				// delete nodes from end of route until we find the clickd node
 				for (int i = route_.Count; i > 1; --i) {
