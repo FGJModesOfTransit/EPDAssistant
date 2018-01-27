@@ -27,6 +27,9 @@ public class DiseaseManager : MonoBehaviour
 	[SerializeField]
 	private GameObject doneEffectPrefab;
 
+	[SerializeField]
+	private GameObject spreadEffectPrefab;
+
     public Image ImagePrefab;
     public Gradient DiseaseColor;
     public DiseaseWave[] Waves;
@@ -72,6 +75,10 @@ public class DiseaseManager : MonoBehaviour
     {
         List<Node> neighbors = GraphManager.Instance.GetNeighbors(n);
         Node victim = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
+
+		var effect = Instantiate (spreadEffectPrefab, n.transform.position, Quaternion.identity);
+		effect.transform.LookAt (victim.transform.position, -Vector3.forward);
+
         AddDisease(victim);
     }
 
