@@ -22,7 +22,10 @@ public class MessageManager : MonoBehaviour
 	private static MessageManager m_Instance;
 
 	[SerializeField]
-	private float messageTime = 5;
+	private float messageTime = 3;
+
+	[SerializeField]
+	private float lastMessageTimeAdded = 5;
 
 	[SerializeField]
 	private GameObject messagePanel;
@@ -82,7 +85,14 @@ public class MessageManager : MonoBehaviour
 		{
 			currentMessage.TimeToLive -= Time.deltaTime;
 
-			if (currentMessage.TimeToLive <= 0) 
+			if (messageQueue.Count == 0) 
+			{
+				if (currentMessage.TimeToLive <= -lastMessageTimeAdded) 
+				{
+					HideCurrentMessage();
+				}
+			}
+			else if (currentMessage.TimeToLive <= 0) 
 			{
 				HideCurrentMessage();
 			}

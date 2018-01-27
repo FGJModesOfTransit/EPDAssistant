@@ -1747,7 +1747,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60ad3ab3c6bc141d08155ebf453ad3cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageTime: 8
+  messageTime: 3
+  lastMessageTimeAdded: 5
   messagePanel: {fileID: 1793556976941692}
   messagePanelText: {fileID: 114923829621233576}
 --- !u!114 &114877986716438598

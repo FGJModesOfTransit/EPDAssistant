@@ -32,10 +32,13 @@ public class Connection : MonoBehaviour
 
     public void SetOnPath(bool value, bool inverted)
     {
-        m_RouteSprite.gameObject.SetActive(value);
-        if (value)
+        if (m_RouteSprite != null)
         {
-            Stretch(m_RouteSprite.gameObject, m_Node1.transform.position, m_Node2.transform.position, inverted);
+            m_RouteSprite.gameObject.SetActive(value);
+            if (value)
+            {
+                Stretch(m_RouteSprite.gameObject, m_Node1.transform.position, m_Node2.transform.position, inverted);
+            }
         }
     }
 
@@ -72,7 +75,8 @@ public class Connection : MonoBehaviour
 
     void OnEnable()
     {
-        m_RouteSprite = transform.Find("RouteMarker").gameObject;
+        Transform marker = transform.Find("RouteMarker");
+        if (marker != null ) m_RouteSprite = marker.gameObject;
         if (m_RouteSprite)
         {
             m_RouteSprite.gameObject.SetActive(false);
