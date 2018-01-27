@@ -53,6 +53,9 @@
   <ItemGroup>
      <Compile Include="Assets\Movement.cs" />
      <Compile Include="Assets\OurAnimator.cs" />
+     <Compile Include="Assets\scripts\logic\Connection.cs" />
+     <Compile Include="Assets\scripts\logic\GraphManager.cs" />
+     <Compile Include="Assets\scripts\logic\Node.cs" />
      <None Include="Assets\LeanTween\ReadMe.txt" />
      <None Include="Assets\LeanTween\License.txt" />
  <Reference Include="UnityEngine.UI">
