@@ -53,4 +53,15 @@ public class SideMenu : MonoBehaviour
 			Debug.Log ("Player not found!");
 		}
 	}
+
+	public void PrintStatus()
+	{
+		MessageManager.Instance.AddMessage("Status: ");
+		Close();
+	}
+
+	public void Restart()
+	{
+		UnityEngine.SceneManagement.SceneManager.LoadScene (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+	}
 }
