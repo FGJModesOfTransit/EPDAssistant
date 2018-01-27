@@ -183,7 +183,7 @@ public class DiseaseManager : MonoBehaviour
 		{
 			var position = n.transform.position;
 
-			MessageManager.Instance.AddMessage("Outbreak detected! Please advice.\n[Locate]",
+			MessageManager.Instance.AddMessage("Outbreak detected! Please advice.\n[Tap to locate]",
 				() => CameraPanAndZoom.Instance.GoToPoint(position));
 		}
 
@@ -321,7 +321,7 @@ public class DiseaseManager : MonoBehaviour
 		pastInflicted += node.CurrentPopulation;
 
 		var position = disease.transform.position;
-		MessageManager.Instance.AddMessage("Uncontrolled outbreak! Quarantine issued\n[Locate]",
+		MessageManager.Instance.AddMessage("Uncontrolled outbreak! Quarantine issued\n[Tap to locate]",
 			() => CameraPanAndZoom.Instance.GoToPoint(position));
 
 		diseases.Remove(disease);
