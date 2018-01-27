@@ -6,7 +6,8 @@ public enum ConnectionType
 {
     None = 0,
     Path = 1,
-    Road = 2
+    Road = 2,
+	  Railway = 3
 }
 
 [ExecuteInEditMode]
@@ -108,7 +109,10 @@ public class Connection : MonoBehaviour
             case ConnectionType.Road:
                 color = Color.white;
                 break;
-            default:
+						case ConnectionType.Railway:
+								color = Color.gray;
+								break;
+		        default:
                 color = Color.black;
                 break;
         }
