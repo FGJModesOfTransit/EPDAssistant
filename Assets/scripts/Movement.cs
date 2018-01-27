@@ -29,6 +29,7 @@ public class Movement : MonoBehaviour {
 	public void AddTarget(GameObject target)
 	{
 		// assumes always legal
+		Debug.Log("Adding a new target");
 
 		if (currentNode_ == null) {
 			Debug.Log ("Current node not set! Set currrent node in editor.");
@@ -36,9 +37,11 @@ public class Movement : MonoBehaviour {
 	  }
 		route_.Add (target);
 		if (!moving_) {
+			Debug.Log ("Starting to move");
 			moveNext ();
 		} else if (route_.Count > 0 && target == route_ [route_.Count - 1]) {
-			//route_.RemoveAt (route_.Count - 1);
+			Debug.Log ("Removing a node from route");
+			route_.RemoveAt (route_.Count - 1);
 		}
 		disableHighlighted ();
 		highlightNeighbours ();
