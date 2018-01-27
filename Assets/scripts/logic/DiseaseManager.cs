@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public struct DiseaseWave
 {
     public float[] diseaseTimes;
+    public string name;
 }
 
 public class DiseaseManager : MonoBehaviour
@@ -351,4 +352,15 @@ public class DiseaseManager : MonoBehaviour
 	{
 		return pastInflicted + CountCurrentInflicted();
 	}
+
+    public string GetDiseaseName()
+    {
+        if ( m_State == State.InWave && m_CurrentWave >= 0 )
+        {
+            return Waves[m_CurrentWave].name;
+        } else
+        {
+            return "None";
+        }
+    }
 }

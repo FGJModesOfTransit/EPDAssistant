@@ -150,16 +150,19 @@ MonoBehaviour:
   Waves:
   - diseaseTimes:
     - 8
+    name: Influenza
   - diseaseTimes:
     - 5
     - 9
     - 15
+    name: Dengue
   - diseaseTimes:
     - 5
     - 9
     - 15
     - 21
     - 23
+    name: Rabies
   - diseaseTimes:
     - 3
     - 7
@@ -168,6 +171,7 @@ MonoBehaviour:
     - 25
     - 27
     - 31
+    name: Ebola
   - diseaseTimes:
     - 3
     - 6
@@ -177,6 +181,7 @@ MonoBehaviour:
     - 26
     - 28
     - 33
+    name: Smallpox
   - diseaseTimes:
     - 2
     - 4
@@ -187,8 +192,9 @@ MonoBehaviour:
     - 24
     - 29
     - 32
+    name: Plague
   TimeBetweenWaves: 4
-  GrowthSpeed: 0.0003
+  GrowthSpeed: 0.00035
   SpreadDelay: 150
 --- !u!223 &223467189210867082
 Canvas:
