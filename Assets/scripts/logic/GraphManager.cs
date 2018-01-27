@@ -84,7 +84,13 @@ public class GraphManager : MonoBehaviour
     public Node GetRandomNode()
     {
 		var activeNodes = m_Nodes.Where (node => node.gameObject.activeInHierarchy).ToArray();
-		return activeNodes[UnityEngine.Random.Range(0, m_Nodes.Length)];
+        int index = UnityEngine.Random.Range(0, activeNodes.Length);
+        if ( index >= activeNodes.Length)
+        {
+            Debug.LogError("GetRandomNode index " + index + ", array size = " + activeNodes.Length);
+        }
+
+        return activeNodes[index];
     }
 
     void Awake()
@@ -144,7 +150,7 @@ public class GraphManager : MonoBehaviour
 	{
 		foreach (var node in m_Nodes) 
 		{
-			if (node && !node.gameObject.activeInHierarchy && node.level <= wave) 
+			if (node && !node.gameObject.activeInHierarchy && node.level == wave+1) 
 			{
 				node.gameObject.SetActive(true);
 			}

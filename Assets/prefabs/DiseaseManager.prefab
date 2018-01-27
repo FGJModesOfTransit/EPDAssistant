@@ -109,7 +109,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   creationEffectPrefab: {fileID: 1543981020092024, guid: 1aefdecde6d13497d9206a93acaf8dbd,
     type: 2}
-  healingEffectPrefab: {fileID: 0}
+  healingEffectPrefab: {fileID: 1339212192779646, guid: 923b032869716414c8cdabd2c38ba7db,
+    type: 2}
   doneEffectPrefab: {fileID: 0}
   ImagePrefab: {fileID: 114356243335669764, guid: 388a082e37d38544baec9c5502b93da0,
     type: 2}
@@ -145,10 +146,20 @@ MonoBehaviour:
   Waves:
   - diseaseTimes:
     - 1
+  - diseaseTimes:
+    - 1
     - 5
+    - 15
+  - diseaseTimes:
+    - 1
+    - 5
+    - 14
+    - 25
+    - 32
+    - 38
   TimeBetweenWaves: 3
-  GrowthSpeed: 0.0006
-  SpreadDelay: 200
+  GrowthSpeed: 0.0004
+  SpreadDelay: 300
 --- !u!223 &223467189210867082
 Canvas:
   m_ObjectHideFlags: 1

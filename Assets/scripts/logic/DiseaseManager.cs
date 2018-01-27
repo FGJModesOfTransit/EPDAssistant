@@ -113,7 +113,7 @@ public class DiseaseManager : MonoBehaviour
 
     private void NextWave()
     {
-		if (m_CurrentWave > 0 && OnWaveCompleted != null) 
+		if (m_CurrentWave >= 0 && OnWaveCompleted != null) 
 		{
 			OnWaveCompleted(m_CurrentWave);
 		}
@@ -143,10 +143,9 @@ public class DiseaseManager : MonoBehaviour
     public bool AddDisease()
     {
 		Node n = GraphManager.Instance.GetRandomNode();
-		//while (Movement.PlayerCharacter != null && n == Movement.PlayerCharacter.CurrentNode) 
-		//{
-			n = GraphManager.Instance.GetRandomNode(); 
-		//}
+	
+		n = GraphManager.Instance.GetRandomNode(); 
+
         return AddDisease(n);
     }
 
@@ -171,6 +170,11 @@ public class DiseaseManager : MonoBehaviour
 			}
 
 			diseases.Add(disease);
+
+			var position = disease.transform.position;
+
+			MessageManager.Instance.AddMessage("Outbreak detected at\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y,
+				() => CameraPanAndZoom.Instance.GoToPoint(position));
 
             return true;
         }
@@ -254,8 +258,6 @@ public class DiseaseManager : MonoBehaviour
 		}
 			
 		pastInflicted += Mathf.FloorToInt(disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation);
-
-		MessageManager.Instance.AddMessage("Outbreak contained at\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
 
 		diseases.Remove(disease);
 
