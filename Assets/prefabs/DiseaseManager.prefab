@@ -111,7 +111,10 @@ MonoBehaviour:
     type: 2}
   healingEffectPrefab: {fileID: 1339212192779646, guid: 923b032869716414c8cdabd2c38ba7db,
     type: 2}
-  doneEffectPrefab: {fileID: 0}
+  doneEffectPrefab: {fileID: 1339212192779646, guid: 2b92600bd2c1b42d48905fcfe362f28f,
+    type: 2}
+  spreadEffectPrefab: {fileID: 1577962676635744, guid: 64213fae6a55b454b839fa928ab3d4b9,
+    type: 2}
   ImagePrefab: {fileID: 114356243335669764, guid: 388a082e37d38544baec9c5502b93da0,
     type: 2}
   DiseaseColor:
