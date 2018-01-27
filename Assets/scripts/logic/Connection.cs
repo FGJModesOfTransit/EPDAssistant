@@ -16,6 +16,7 @@ public class Connection : MonoBehaviour
     public Node m_Node1, m_Node2;
     public ConnectionType m_Type;
     public float Width = 5;
+  	public float TravelTime = 1.0f;
 
     private SpriteRenderer m_Sprite;
 
@@ -85,9 +86,12 @@ public class Connection : MonoBehaviour
         Vector3 direction = (pos2-pos1).normalized;
         sprite.transform.right = direction;
         if (_mirrorZ) sprite.transform.right *= -1f;
-        Vector3 scale = new Vector3(origSize.x, Width, 1);
+        //Vector3 scale = new Vector3(origSize.x, Width, 1);
+        Vector3 scale = new Vector3(1f, Width, 1);
         scale.x *= Vector3.Distance(pos1, pos2);
-        sprite.transform.localScale = scale;
+
+        rend.size = new Vector2(scale.x, scale.y);
+        sprite.transform.localScale = Vector3.one;
     }
 
     public void DrawGizmo()
