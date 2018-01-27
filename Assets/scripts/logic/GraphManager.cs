@@ -7,6 +7,8 @@ public class GraphManager : MonoBehaviour
 {
     public GameObject ConnectionPrefab;
 
+    public Sprite[] RoadSprites;
+
     public static GraphManager Instance
     {
         get
