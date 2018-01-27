@@ -33,6 +33,10 @@ public class DiseaseManager : MonoBehaviour
     private float m_WaveTimer;
     private State m_State;
 
+	private List<Disease> diseases = new List<Disease>();
+
+	private int pastInflicted = 0;
+
     public static DiseaseManager Instance
     {
         get
@@ -85,7 +89,7 @@ public class DiseaseManager : MonoBehaviour
 			Disease d = node.GetComponent<Disease>();
 			if ( d != null)
 			{
-				d.Remove();
+				HealDisease(d);
 			}
 		}
 	}
@@ -139,6 +143,7 @@ public class DiseaseManager : MonoBehaviour
             }
             return true;
         }
+		diseases.Add (disease);
         return false;
     }
 
@@ -150,7 +155,7 @@ public class DiseaseManager : MonoBehaviour
             Disease d = nodes[i].GetComponent<Disease>();
             if ( d != null)
             {
-                d.Remove();
+				HealDisease(d);
             }
         }
     }
@@ -209,4 +214,30 @@ public class DiseaseManager : MonoBehaviour
 
         }
     }
+
+	public void HealDisease(Disease disease)
+	{
+		pastInflicted += Mathf.FloorToInt(disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation);
+
+		MessageManager.Instance.AddMessage("Outbreak contained at\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
+
+		diseases.Remove (disease);
+
+		disease.Remove();
+	}
+
+	public int CountCurrentInflicted()
+	{
+		var count = 0f;
+		foreach (var disease in diseases) 
+		{
+			count += disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation;
+		}
+		return Mathf.FloorToInt (count);
+	}
+
+	public int CountTotalInflicted()
+	{
+		return pastInflicted + CountCurrentInflicted();
+	}
 }

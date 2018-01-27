@@ -7,10 +7,10 @@ public class Movement : MonoBehaviour
 {
 	public static event System.Action<GameObject, Node> OnMovementComplete;
 
-	public Node currentNode_ = null;
+	private Node currentNode_ = null;
 	bool moving_ = false;
 
-	public GraphManager graph_ = null;
+	GraphManager graph_ = null;
 
 	List<Node> route_ = new List<Node> ();
 
@@ -19,10 +19,11 @@ public class Movement : MonoBehaviour
 	int id = 0;
 	// Use this for initialization
 	void Start () {
-		if (graph_ == null) {
-			Debug.Log ("No graphmanager set for movement(in player)" + currentNode_.name);
-		}
 		highlightNeighbours ();
+
+		graph_ = GameObject.Find ("GraphManager").GetComponent<GraphManager> ();
+		currentNode_ = graph_.GetRandomNode ();
+		transform.position = currentNode_.transform.position;
 	}
 		
 	public void AddTarget(Node target)
@@ -96,6 +97,8 @@ public class Movement : MonoBehaviour
 		route_.RemoveAt (0);
 
 		//TODO: get route speed
+//		Connection conn = manager
+
 		float routeSpeed = 1.0f;
 		id = LeanTween.move(gameObject, nextNode.gameObject.transform, routeSpeed).id;
 		LTDescr d = LeanTween.descr( id );
@@ -116,9 +119,10 @@ public class Movement : MonoBehaviour
 		}
 		moveNext ();
 	}
-	/*
-	Connection GetConnections(Node n1, Node n2)
+
+/*	Connection GetConnections(Node n1, Node n2)
 	{
+		
 		
 	}*/
 }
