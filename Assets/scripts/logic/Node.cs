@@ -12,6 +12,8 @@ public class Node : MonoBehaviour
 	public int CurrentPopulation
 	{ get { return initialPopulation; } }
 
+	public int level = 0;
+
 	private bool isSelectable;
 	public bool IsSelectable
 	{
@@ -36,6 +38,14 @@ public class Node : MonoBehaviour
 					selectionButton = null;
 				}
 			}
+		}
+	}
+
+	void Start()
+	{
+		if (level > 0) 
+		{
+			gameObject.SetActive(false);
 		}
 	}
 

@@ -6,7 +6,8 @@ public enum ConnectionType
 {
     None = 0,
     Path = 1,
-    Road = 2
+    Road = 2,
+	  Railway = 3
 }
 
 [ExecuteInEditMode]
@@ -18,8 +19,8 @@ public class Connection : MonoBehaviour
     public float Width = 5;
   	public float TravelTime = 1.0f;
 
-    private SpriteRenderer m_Sprite;
-
+    private GameObject m_RouteSprite;
+	private SpriteRenderer m_Sprite;
 
     ConnectionType Type
     {
@@ -27,6 +28,18 @@ public class Connection : MonoBehaviour
         set { if ( m_Type != value )
             {
                 m_Type = value;
+            }
+        }
+    }
+
+    public void SetOnPath(bool value, bool inverted)
+    {
+        if (m_RouteSprite != null)
+        {
+            m_RouteSprite.gameObject.SetActive(value);
+            if (value)
+            {
+                Stretch(m_RouteSprite.gameObject, m_Node1.transform.position, m_Node2.transform.position, inverted);
             }
         }
     }
@@ -64,7 +77,18 @@ public class Connection : MonoBehaviour
 
     void OnEnable()
     {
+        Transform marker = transform.Find("RouteMarker");
+        if (marker != null ) m_RouteSprite = marker.gameObject;
+        if (m_RouteSprite)
+        {
+            m_RouteSprite.gameObject.SetActive(false);
+        }
     }
+
+	void Awake()
+	{
+		m_Sprite = GetComponent<SpriteRenderer> ();
+	}
 
     private void Update()
     {
@@ -74,7 +98,10 @@ public class Connection : MonoBehaviour
         }
         else
         {
-
+			if (m_Sprite && m_Node1 && m_Node2)
+			{
+				m_Sprite.enabled = m_Node1.gameObject.activeInHierarchy && m_Node2.gameObject.activeInHierarchy;
+			}
         }
     }
 
@@ -108,7 +135,10 @@ public class Connection : MonoBehaviour
             case ConnectionType.Road:
                 color = Color.white;
                 break;
-            default:
+						case ConnectionType.Railway:
+								color = Color.gray;
+								break;
+		        default:
                 color = Color.black;
                 break;
         }

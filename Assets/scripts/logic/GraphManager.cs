@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,13 +26,23 @@ public class GraphManager : MonoBehaviour
     private Node[] m_Nodes;
     private Dictionary<Node, List<Connection>> m_Connections;
 
+	void OnEnable()
+	{
+		DiseaseManager.OnWaveCompleted += DiseaseManager_OnWaveCompleted;
+	}
+
+	void OnDisable()
+	{
+		DiseaseManager.OnWaveCompleted += DiseaseManager_OnWaveCompleted;
+	}
+
     public List<Connection> GetConnections(Node n1)
     {
-        return m_Connections[n1];
+		return m_Connections[n1].Where(n => n.OtherEnd(n1).gameObject.activeInHierarchy).ToList();
     }
 
-		public Connection GetConnection(Node n1, Node n2)
-		{
+	public Connection GetConnection(Node n1, Node n2)
+	{
 		Connection con = null;
 			foreach (Connection c in m_Connections[n1]) {
 				if (c.OtherEnd (n1) == n2) {
@@ -40,7 +51,7 @@ public class GraphManager : MonoBehaviour
 				}
 			}
 		return con;
-		}
+	}
 		
     // Called from the editor to set up a connection 
     public void CreateConnection(GameObject connObj, Node n1, Node n2, ConnectionType type)
@@ -57,7 +68,10 @@ public class GraphManager : MonoBehaviour
         List<Connection> conns = m_Connections[n];
         for(int i = 0; i < conns.Count; ++i)
         {
-            result.Add(conns[i].m_Node1 == n ? conns[i].m_Node2 : conns[i].m_Node1);
+			if (conns [i].m_Node1.gameObject.activeInHierarchy && conns [i].m_Node2.gameObject.activeInHierarchy) 
+			{
+				result.Add(conns[i].m_Node1 == n ? conns[i].m_Node2 : conns[i].m_Node1);
+			}
         }
         return result;
     }
@@ -69,7 +83,8 @@ public class GraphManager : MonoBehaviour
 
     public Node GetRandomNode()
     {
-        return m_Nodes[UnityEngine.Random.Range(0, m_Nodes.Length)];
+		var activeNodes = m_Nodes.Where (node => node.gameObject.activeInHierarchy).ToArray();
+		return activeNodes[UnityEngine.Random.Range(0, m_Nodes.Length)];
     }
 
     void Awake()
@@ -125,8 +140,14 @@ public class GraphManager : MonoBehaviour
         Debug.Log(m_Nodes.Length + " nodes and " + connCount + " connections initialized");
     }
 
-    void Update()
-    {
-
-    }
+	void DiseaseManager_OnWaveCompleted (int wave)
+	{
+		foreach (var node in m_Nodes) 
+		{
+			if (node && !node.gameObject.activeInHierarchy && node.level <= wave) 
+			{
+				node.gameObject.SetActive(true);
+			}
+		}
+	}
 }

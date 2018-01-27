@@ -63,10 +63,9 @@ public class CameraPanAndZoom : MonoBehaviour
 	{
 		yield return new WaitForSeconds (1);
 
-		var player = GameObject.FindWithTag ("Player");
-		if (player != null) 
+		if (Movement.PlayerCharacter != null) 
 		{
-			GoToPoint(player.transform.position);
+			GoToPoint(Movement.PlayerCharacter.transform.position);
 			LeanTween.value (gameCamera.orthographicSize, (minCameraScale + maxCameraScale) * 0.5f, 1.5f)
 				.setOnUpdate ((zoom) => {
 					gameCamera.orthographicSize = zoom;

@@ -25,7 +25,8 @@ public class DiseaseManager : MonoBehaviour
     public float GrowthSpeed;
     public int SpreadDelay;
 
-	public static Action<Node, Disease> OnDiseaseAdded;
+	public static event Action<Node, Disease> OnDiseaseAdded;
+	public static event Action<int> OnWaveCompleted;
 
     private Canvas m_DiseaseCanvas;
     private int m_CurrentWave;
@@ -103,10 +104,16 @@ public class DiseaseManager : MonoBehaviour
 
     private void NextWave()
     {
+		if (m_CurrentWave > 0 && OnWaveCompleted != null) 
+		{
+			OnWaveCompleted(m_CurrentWave);
+		}
+
         m_State = State.InWave;
         ++m_CurrentWave;
         m_DiseaseCounter = 0;
         m_WaveTimer = 0f;
+
         if ( m_CurrentWave == Waves.Length )
         {
             MessageManager.Instance.AddMessage("Congratulations! No more disease!");
@@ -126,7 +133,11 @@ public class DiseaseManager : MonoBehaviour
 
     public bool AddDisease()
     {
-        Node n = GraphManager.Instance.GetRandomNode();
+		Node n = GraphManager.Instance.GetRandomNode();
+		while (Movement.PlayerCharacter != null && n == Movement.PlayerCharacter.CurrentNode) 
+		{
+			n = GraphManager.Instance.GetRandomNode(); 
+		}
         return AddDisease(n);
     }
 
@@ -141,9 +152,12 @@ public class DiseaseManager : MonoBehaviour
             {
                 OnDiseaseAdded(n, disease);
             }
+
+			diseases.Add(disease);
+
             return true;
         }
-		diseases.Add (disease);
+
         return false;
     }
 
@@ -221,7 +235,7 @@ public class DiseaseManager : MonoBehaviour
 
 		MessageManager.Instance.AddMessage("Outbreak contained at\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
 
-		diseases.Remove (disease);
+		diseases.Remove(disease);
 
 		disease.Remove();
 	}
@@ -232,7 +246,7 @@ public class DiseaseManager : MonoBehaviour
 
 		MessageManager.Instance.AddMessage("Pandemic alert!\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
 
-		diseases.Remove (disease);
+		diseases.Remove(disease);
 
 		disease.Remove();
 	}

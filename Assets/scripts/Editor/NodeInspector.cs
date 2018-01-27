@@ -17,6 +17,7 @@ class NodeEditor : Editor
 
         AddConnectionBox(me, ConnectionType.Path, "path");
         AddConnectionBox(me, ConnectionType.Road, "road");
+    		AddConnectionBox(me, ConnectionType.Railway, "railway");
     }
 
     private void AddConnectionBox(Node me, ConnectionType type, string name)
