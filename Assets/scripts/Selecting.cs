@@ -14,8 +14,7 @@ public class Selecting : MonoBehaviour {
 			return;
 		}
 		Debug.Log("Clicked node." + n.name);
-		GameObject[] player = GameObject.FindGameObjectsWithTag("Player");
 
-		player[0].GetComponent<Movement>().AddTarget (n);
+		Movement.PlayerCharacter.GetComponent<Movement>().AddTarget (n);
 	}
 }
