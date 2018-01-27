@@ -35,24 +35,31 @@ public class Movement : MonoBehaviour {
 			Debug.Log ("Current node not set! Set currrent node in editor.");
 			return;
 	  }
-		route_.Add (target);
+
 		if (!moving_) {
 			Debug.Log ("Starting to move");
+			route_.Add (target);
 			moveNext ();
+
 		} else if (route_.Count > 0 && target == route_ [route_.Count - 1]) {
 			Debug.Log ("Removing a node from route");
 			route_.RemoveAt (route_.Count - 1);
-			disableHighlighted ();
-			highlightNeighbours ();
+		} else {
+			route_.Add (target);
 		}
+
+		disableHighlighted ();
+		highlightNeighbours ();
 	}
 
 	void disableHighlighted()
 	{
+		Debug.Log ("Clearing" + highlighted_.Count + " nodes.");
 		foreach(Node n in highlighted_)
 		{
 			n.IsSelectable = false;
 		}
+		highlighted_.Clear ();
 	}
 
 	void highlightNeighbours()
@@ -64,7 +71,9 @@ public class Movement : MonoBehaviour {
 		}
 		conns = graph_.GetConnections (highlight);
 		foreach (Connection c in conns) {
-			c.OtherEnd (highlight).IsSelectable = true;
+			Node high = c.OtherEnd (highlight);
+			high.IsSelectable = true;
+			highlighted_.Add(high);
 		}
 	}
 
