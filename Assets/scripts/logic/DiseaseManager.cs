@@ -30,6 +30,9 @@ public class DiseaseManager : MonoBehaviour
 	[SerializeField]
 	private GameObject spreadEffectPrefab;
 
+	[SerializeField]
+	private float healProtectionTime = 10;
+
     public Image ImagePrefab;
     public Gradient DiseaseColor;
     public DiseaseWave[] Waves;
@@ -76,10 +79,11 @@ public class DiseaseManager : MonoBehaviour
         List<Node> neighbors = GraphManager.Instance.GetNeighbors(n);
         Node victim = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
 
-		var effect = Instantiate (spreadEffectPrefab, n.transform.position, Quaternion.identity);
-		effect.transform.LookAt (victim.transform.position, -Vector3.forward);
-
-        AddDisease(victim);
+		if (AddDisease (victim)) 
+		{
+			var effect = Instantiate (spreadEffectPrefab, n.transform.position, Quaternion.identity);
+			effect.transform.LookAt (victim.transform.position, -Vector3.forward);
+		}
     }
 
     private static DiseaseManager m_Instance;
@@ -137,7 +141,7 @@ public class DiseaseManager : MonoBehaviour
             return;
         }
 			
-		if (m_CurrentWave == 1) 
+		if (m_CurrentWave == 0) 
 		{
 			MessageManager.Instance.AddMessage ("A pathogen detect! Please advice!");
 		}
@@ -159,18 +163,26 @@ public class DiseaseManager : MonoBehaviour
 	
 		n = GraphManager.Instance.GetRandomNode(); 
 
-		var position = n.transform.position;
+		var success = AddDisease(n);
 
-		MessageManager.Instance.AddMessage("Outbreak detected at\nX:" + n.transform.position.x + ", Y:" + n.transform.position.y,
-			() => CameraPanAndZoom.Instance.GoToPoint(position));
+		if (success) 
+		{
+			var position = n.transform.position;
 
-        return AddDisease(n);
+			MessageManager.Instance.AddMessage("Outbreak detected at\nX:" + n.transform.position.x + ", Y:" + n.transform.position.y,
+				() => CameraPanAndZoom.Instance.GoToPoint(position));
+		}
+
+		return success;
     }
 
     public bool AddDisease(Node n)
     {
         if (n.Lost) return false;
         if (Movement.PlayerCharacter != null && n == Movement.PlayerCharacter.CurrentNode) return false;
+
+		// Was just healed
+		if (n.LastHealed > 0 && n.LastHealed + healProtectionTime > Time.time) return false;
 
         Disease disease = n.GetComponent<Disease>();
 		if (disease == null)
@@ -269,8 +281,12 @@ public class DiseaseManager : MonoBehaviour
 		{
 			Instantiate (healingEffectPrefab, disease.transform.position, Quaternion.identity);
 		}
-			
-		pastInflicted += Mathf.FloorToInt(disease.progress * (float)disease.GetComponentInParent<Node>().CurrentPopulation);
+
+		var node = disease.GetComponentInParent<Node>();
+
+		node.LastHealed = Time.time;
+
+		pastInflicted += Mathf.FloorToInt(disease.progress * (float)node.CurrentPopulation);
 
 		diseases.Remove(disease);
 

@@ -73,20 +73,23 @@ public class MessageManager : MonoBehaviour
 
 	void Update()
 	{
-		if (Time.time > 0.5f && currentMessage != null && !currentMessage.Complete) 
+		if (Time.time > 0.5f && currentMessage != null) 
 		{
 			currentMessage.TimeToLive -= Time.deltaTime;
 
-			if (messageQueue.Count == 0) 
+			if (!currentMessage.Complete || currentMessage.TimeToLive <= -lastMessageTimeAdded) 
 			{
-				if (currentMessage.TimeToLive <= -lastMessageTimeAdded) 
+				if (messageQueue.Count == 0) 
+				{
+					if (currentMessage.TimeToLive <= -lastMessageTimeAdded) 
+					{
+						HideCurrentMessage();
+					}
+				}
+				else if (currentMessage.TimeToLive <= 0) 
 				{
 					HideCurrentMessage();
 				}
-			}
-			else if (currentMessage.TimeToLive <= 0) 
-			{
-				HideCurrentMessage();
 			}
 		}
 	}

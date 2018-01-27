@@ -41,6 +41,11 @@ public class GraphManager : MonoBehaviour
 		return m_Connections[n1].Where(n => n.OtherEnd(n1).gameObject.activeInHierarchy).ToList();
     }
 
+	public List<Connection> GetAllConnections(Node n1)
+	{
+		return m_Connections[n1];
+	}
+
 	public Connection GetConnection(Node n1, Node n2)
 	{
 		Connection con = null;
