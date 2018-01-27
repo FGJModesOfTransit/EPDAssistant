@@ -16,6 +16,8 @@ public class DiseaseManager : MonoBehaviour
     public Gradient DiseaseColor;
     public DiseaseWave Waves;
 
+	public static Action<Node, Disease> OnDiseaseAdded;
+
     private Canvas m_DiseaseCanvas;
 
     public static DiseaseManager Instance
@@ -49,12 +51,16 @@ public class DiseaseManager : MonoBehaviour
     public void AddDisease()
     {
         Node n = GraphManager.Instance.GetRandomNode();
-        Disease oldDisease = n.GetComponent<Disease>();
-        if (oldDisease == null)
+        Disease disease = n.GetComponent<Disease>();
+		if (disease == null)
         {
             Debug.Log("Added disease to node " + n.name);
-            n.gameObject.AddComponent<Disease>();
+			disease = n.gameObject.AddComponent<Disease>();
         }
+		if (OnDiseaseAdded != null) 
+		{
+			OnDiseaseAdded (n, disease);
+		}
     }
 
 	void Update ()
