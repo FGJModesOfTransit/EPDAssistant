@@ -39,5 +39,11 @@ public class Disease : MonoBehaviour
                 DiseaseManager.Instance.SpreadFrom(GetComponent<Node>());
             }
         }
+
+		if (progress >= 1) 
+		{
+			ScreenShake.Instance.Shake (0.5f);
+			DiseaseManager.Instance.RemoveDisease(this);
+		}
 	}
 }
