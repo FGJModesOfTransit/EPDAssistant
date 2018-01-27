@@ -75,19 +75,16 @@ public class DiseaseManager : MonoBehaviour
         if ( m_CurrentWave == Waves.Length )
         {
             MessageManager.Instance.AddMessage("Congratulations! No more disease!");
-            Debug.Log("Congrats");
             gameObject.SetActive(false);
             return;
         }
 
         MessageManager.Instance.AddMessage("Starting wave " + (1+m_CurrentWave) );
-        Debug.Log("starting wave " + m_CurrentWave);
     }
 
     private void EndWave()
     {
         MessageManager.Instance.AddMessage("Wave " + (1+m_CurrentWave) + " complete!");
-        Debug.Log("wave " + m_CurrentWave + " complete");
         m_WaveTimer = 0f;
         m_State = State.Waiting;
     }
@@ -98,7 +95,6 @@ public class DiseaseManager : MonoBehaviour
         Disease disease = n.GetComponent<Disease>();
 		if (disease == null)
         {
-            Debug.Log("Added disease to node " + n.name);
 			disease = n.gameObject.AddComponent<Disease>();
 
             if (OnDiseaseAdded != null)
@@ -112,7 +108,6 @@ public class DiseaseManager : MonoBehaviour
 
     public void DebugHealAll()
     {
-        int count = 0;
         var nodes = GraphManager.Instance.GetNodes();
         for (int i = 0; i < nodes.Length; ++i)
         {
