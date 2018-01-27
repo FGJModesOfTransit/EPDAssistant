@@ -22,6 +22,8 @@ public class DiseaseManager : MonoBehaviour
     public Gradient DiseaseColor;
     public DiseaseWave[] Waves;
     public float TimeBetweenWaves;
+    public float GrowthSpeed;
+    public int SpreadDelay;
 
 	public static Action<Node, Disease> OnDiseaseAdded;
 
@@ -50,6 +52,13 @@ public class DiseaseManager : MonoBehaviour
     {
         Image i = Instantiate<Image>(ImagePrefab, m_DiseaseCanvas.transform);
         return i;
+    }
+
+    public void SpreadFrom(Node n)
+    {
+        List<Node> neighbors = GraphManager.Instance.GetNeighbors(n);
+        Node victim = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
+        AddDisease(victim);
     }
 
     private static DiseaseManager m_Instance;
@@ -114,6 +123,11 @@ public class DiseaseManager : MonoBehaviour
     public bool AddDisease()
     {
         Node n = GraphManager.Instance.GetRandomNode();
+        return AddDisease(n);
+    }
+
+    public bool AddDisease(Node n)
+    { 
         Disease disease = n.GetComponent<Disease>();
 		if (disease == null)
         {

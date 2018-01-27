@@ -143,6 +143,8 @@ MonoBehaviour:
     - 1
     - 5
   TimeBetweenWaves: 3
+  GrowthSpeed: 0.0003
+  SpreadDelay: 200
 --- !u!223 &223467189210867082
 Canvas:
   m_ObjectHideFlags: 1

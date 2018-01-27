@@ -39,6 +39,17 @@ public class GraphManager : MonoBehaviour
         c.gameObject.name = "Connection " + n1.gameObject.name + " to " + n2.gameObject.name;
     }
 
+    public List<Node> GetNeighbors(Node n)
+    {
+        List<Node> result = new List<Node>();
+        List<Connection> conns = m_Connections[n];
+        for(int i = 0; i < conns.Count; ++i)
+        {
+            result.Add(conns[i].m_Node1 == n ? conns[i].m_Node2 : conns[i].m_Node1);
+        }
+        return result;
+    }
+
     public Node[] GetNodes()
     {
         return m_Nodes;
