@@ -33,7 +33,7 @@ public class Disease : MonoBehaviour
         if ( rndvalue == 0)
         {
             float val = 1f - Mathf.Pow(UnityEngine.Random.Range(0f, 1f), 3f);
-            Debug.Log(val + " vs " + progress);
+            //Debug.Log(val + " vs " + progress);
             if (val < progress)
             {
                 DiseaseManager.Instance.SpreadFrom(GetComponent<Node>());
