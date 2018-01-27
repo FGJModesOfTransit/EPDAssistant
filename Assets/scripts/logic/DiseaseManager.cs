@@ -152,9 +152,12 @@ public class DiseaseManager : MonoBehaviour
             {
                 OnDiseaseAdded(n, disease);
             }
+
+			diseases.Add(disease);
+
             return true;
         }
-		diseases.Add (disease);
+
         return false;
     }
 
@@ -232,7 +235,7 @@ public class DiseaseManager : MonoBehaviour
 
 		MessageManager.Instance.AddMessage("Outbreak contained at\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
 
-		diseases.Remove (disease);
+		diseases.Remove(disease);
 
 		disease.Remove();
 	}
@@ -243,7 +246,7 @@ public class DiseaseManager : MonoBehaviour
 
 		MessageManager.Instance.AddMessage("Pandemic alert!\nX:" + disease.transform.position.x + ", Y:" + disease.transform.position.y);
 
-		diseases.Remove (disease);
+		diseases.Remove(disease);
 
 		disease.Remove();
 	}
