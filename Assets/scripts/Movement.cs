@@ -64,10 +64,15 @@ public class Movement : MonoBehaviour
 	{
 		List<Connection> conns;
 		Node highlight = currentNode_;
+
+		// if still route left, select last node for highlighting.
 		if (route_.Count > 0) {
 			highlight = route_ [route_.Count - 1];
-			highlight.IsSelectable = true;
+			Debug.Log ("Highligting current node named:" + highlight.name);
 		}
+		highlight.IsSelectable = true;
+		highlighted_.Add(highlight);
+		Debug.Log ("Highligting current node named:" + highlight.name);
 		conns = graph_.GetConnections (highlight);
 		Debug.Log ("Highlighting ends of" + conns.Count + " connections");
 		foreach (Connection c in conns) {
