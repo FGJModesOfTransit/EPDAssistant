@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GraphManager : MonoBehaviour
 {
-    public GameObject ConnectionPrefab;
+    public GameObject[] ConnectionPrefabs;
 
     public static GraphManager Instance
     {
@@ -29,14 +29,41 @@ public class GraphManager : MonoBehaviour
     {
         return m_Connections[n1];
     }
+
+//	dgdfgdfgdf
+	/*
+	public Connection GetConnection(Node n1, Node n2)
+	{
+		foreach (Connection c in m_Connections[n1]) {
+			if (c.OtherEnd (n1) == n2) {
+				return c;
+			}
+		}
+	}*/
 		
     // Called from the editor to set up a connection 
     public void CreateConnection(GameObject connObj, Node n1, Node n2, ConnectionType type)
     {
-        connObj.transform.SetParent(this.transform);
+        //connObj.transform.SetParent(this.transform);
         Connection c = connObj.GetComponent<Connection>();
         c.Set(n1, n2, type);
         c.gameObject.name = "Connection " + n1.gameObject.name + " to " + n2.gameObject.name;
+    }
+
+    public List<Node> GetNeighbors(Node n)
+    {
+        List<Node> result = new List<Node>();
+        List<Connection> conns = m_Connections[n];
+        for(int i = 0; i < conns.Count; ++i)
+        {
+            result.Add(conns[i].m_Node1 == n ? conns[i].m_Node2 : conns[i].m_Node1);
+        }
+        return result;
+    }
+
+    public Node[] GetNodes()
+    {
+        return m_Nodes;
     }
 
     public Node GetRandomNode()

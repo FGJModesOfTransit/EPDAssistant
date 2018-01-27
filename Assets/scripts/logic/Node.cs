@@ -6,6 +6,12 @@ public class Node : MonoBehaviour
 {
 	private GameObject selectionButton;
 
+	[SerializeField]
+	private int initialPopulation = 100;
+
+	public int CurrentPopulation
+	{ get { return initialPopulation; } }
+
 	private bool isSelectable;
 	public bool IsSelectable
 	{
@@ -22,6 +28,7 @@ public class Node : MonoBehaviour
 				if (isSelectable) 
 				{
 					selectionButton = NodeSelectionManager.Instance.GetNodeSelector(this);
+					selectionButton.GetComponent<Selecting> ().n = this;
 				}
 				else 
 				{
@@ -48,7 +55,7 @@ public class Node : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position, 1f);
+        //Gizmos.color = Color.red;
+        //Gizmos.DrawSphere(transform.position, 1f);
     }
 }

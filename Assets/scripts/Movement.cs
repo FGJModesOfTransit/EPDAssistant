@@ -1,70 +1,90 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour {
+public class Movement : MonoBehaviour 
+{
+	public static event System.Action<GameObject, Node> OnMovementComplete;
 
-	public GameObject currentNode_ = null;
+	private Node currentNode_ = null;
 	bool moving_ = false;
 
 	GraphManager graph_ = null;
 
-	List<GameObject> route_ = new List<GameObject> ();
+	List<Node> route_ = new List<Node> ();
 
 	List<Node> highlighted_ = new List<Node> ();
 
 	int id = 0;
 	// Use this for initialization
 	void Start () {
-		if (graph_ == null) {
-			Debug.Log ("No graphmanager set for movement(in player)");
-		}
 		highlightNeighbours ();
-	}
 
-	// Update is called once per frame
-	void Update () {
+		graph_ = GameObject.Find ("GraphManager").GetComponent<GraphManager> ();
+		currentNode_ = graph_.GetRandomNode ();
+		transform.position = currentNode_.transform.position;
 	}
-
-	public void AddTarget(GameObject target)
+		
+	public void AddTarget(Node target)
 	{
 		// assumes always legal
+		Debug.Log("Adding a new target");
 
 		if (currentNode_ == null) {
 			Debug.Log ("Current node not set! Set currrent node in editor.");
 			return;
 	  }
-		route_.Add (target);
+
 		if (!moving_) {
+			Debug.Log ("Starting to move");
+			route_.Add (target);
 			moveNext ();
+
 		} else if (route_.Count > 0 && target == route_ [route_.Count - 1]) {
-			//route_.RemoveAt (route_.Count - 1);
+			Debug.Log ("Removing a node from route");
+			route_.RemoveAt (route_.Count - 1);
+		} else {
+			route_.Add (target);
 		}
+
 		disableHighlighted ();
 		highlightNeighbours ();
 	}
 
 	void disableHighlighted()
 	{
+		Debug.Log ("Clearing " + highlighted_.Count + " nodes.");
 		foreach(Node n in highlighted_)
 		{
 			n.IsSelectable = false;
 		}
+		highlighted_.Clear ();
 	}
 
 	void highlightNeighbours()
 	{
-		List<Connection> conns;
-		Node highlight = currentNode_.GetComponent<Node>();
-		if (route_.Count > 0) {
-			highlight = route_ [route_.Count - 1].GetComponent<Node>();
+		var target = route_.LastOrDefault ();
+
+		if (target == null) 
+		{
+			target = currentNode_;
 		}
-		conns = graph_.GetConnections (highlight);
-		foreach (Connection c in conns) {
-			c.OtherEnd (highlight).IsSelectable = true;
+
+		if (target != null) 
+		{
+			Debug.Log ("Target node:" + target.name, target);
+			var conns = graph_.GetConnections (target);
+			foreach (Connection c in conns) 
+			{
+				Node high = c.OtherEnd (target);
+				high.IsSelectable = true;
+				highlighted_.Add(high);
+				Debug.Log ("Highligting node:" + high.name, high);
+			}
 		}
 	}
-
+		
 	void moveNext()
 	{
 		if (route_.Count == 0) {
@@ -73,24 +93,36 @@ public class Movement : MonoBehaviour {
 			return;
 		}
 		moving_ = true;
-		GameObject nextNode = route_ [0];
+		Node nextNode = route_ [0];
 		route_.RemoveAt (0);
 
 		//TODO: get route speed
+//		Connection conn = manager
+
 		float routeSpeed = 1.0f;
-		id = LeanTween.move(gameObject, nextNode.transform, routeSpeed).id;
+		id = LeanTween.move(gameObject, nextNode.gameObject.transform, routeSpeed).id;
 		LTDescr d = LeanTween.descr( id );
 
 		if(d!=null){ // if the tween has already finished it will return null
 			// change some parameters
-			d.setOnComplete( moveNext );
+			d.setOnComplete( HandleMovementComplete );
 		}
 
 		currentNode_ = nextNode;
 	}
-	/*
-	Connection GetConnections(Node n1, Node n2)
+
+	private void HandleMovementComplete()
 	{
+		if (OnMovementComplete != null) 
+		{
+			OnMovementComplete(gameObject, currentNode_);
+		}
+		moveNext ();
+	}
+
+/*	Connection GetConnections(Node n1, Node n2)
+	{
+		
 		
 	}*/
 }

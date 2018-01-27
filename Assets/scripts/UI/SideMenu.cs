@@ -39,4 +39,29 @@ public class SideMenu : MonoBehaviour
 	{
 		Application.Quit();
 	}
+
+	public void FindDoctor()
+	{
+		var doctor = GameObject.FindWithTag ("Player");
+		if (doctor != null) 
+		{
+			CameraPanAndZoom.Instance.GoToPoint (doctor.transform.position);
+			Close ();
+		}
+		else 
+		{
+			Debug.Log ("Player not found!");
+		}
+	}
+
+	public void PrintStatus()
+	{
+		MessageManager.Instance.AddMessage("Status: ");
+		Close();
+	}
+
+	public void Restart()
+	{
+		UnityEngine.SceneManagement.SceneManager.LoadScene (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+	}
 }

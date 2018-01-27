@@ -6,6 +6,20 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Camera))]
 public class CameraPanAndZoom : MonoBehaviour 
 {
+	public static CameraPanAndZoom Instance
+	{
+		get
+		{
+			if (m_Instance == null)
+			{
+				var obj = FindObjectOfType<CameraPanAndZoom>();
+				if (obj != null) m_Instance = obj;
+			}
+			return m_Instance;
+		}
+	}
+	private static CameraPanAndZoom m_Instance;
+
 	[SerializeField]
 	private float mouseZoomScale = 1;
 
@@ -37,18 +51,50 @@ public class CameraPanAndZoom : MonoBehaviour
 
 	private float time = 0.0f;
 
+	LTDescr goToAnimation;
+
 	private void Awake()
 	{
 		gameCamera = GetComponent<Camera>();
+		gameCamera.orthographicSize = maxCameraScale;
+	}
+
+	IEnumerator Start()
+	{
+		yield return new WaitForSeconds (1);
+
+		var player = GameObject.FindWithTag ("Player");
+		if (player != null) 
+		{
+			GoToPoint(player.transform.position);
+			LeanTween.value (gameCamera.orthographicSize, (minCameraScale + maxCameraScale) * 0.5f, 1.5f)
+				.setEase(LeanTweenType.easeInCirc)
+				.setOnUpdate ((zoom) => {
+					gameCamera.orthographicSize = zoom;
+			});
+		}
+	}
+
+	public void GoToPoint(Vector3 point)
+	{
+		if (goToAnimation != null) 
+		{
+			LeanTween.cancel(goToAnimation.id);
+		}
+
+		goToAnimation = LeanTween.move(gameObject, new Vector3 (point.x, point.y, transform.position.z), 1.2f);
 	}
 
 	private void Update()
 	{		
-		HandelDrag();	
+		if (!MenuManager.Instance.SideMenu.IsOpen) 
+		{
+			HandelDrag();	
 
-		HandleZoom();
+			HandleZoom();
 
-		HandleInertia();
+			HandleInertia();
+		}
 	}
 
 	private void HandelDrag()
@@ -62,6 +108,11 @@ public class CameraPanAndZoom : MonoBehaviour
 		}
 		else if (Input.GetMouseButton(0))
 		{
+			if (goToAnimation != null) 
+			{
+				LeanTween.cancel(goToAnimation.id);
+				goToAnimation = null;
+			}
 			var touchposition = Input.mousePosition;
 			if (Input.touchCount > 0) 
 			{

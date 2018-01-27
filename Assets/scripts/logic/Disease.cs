@@ -10,6 +10,12 @@ public class Disease : MonoBehaviour
 
     private Image m_Image;
 
+    public void Remove()
+    {
+        Destroy(m_Image.gameObject);
+        Destroy(this);
+    }
+
     void Start ()
     {
         m_Image = DiseaseManager.Instance.CreateDiseaseImage();
@@ -18,10 +24,20 @@ public class Disease : MonoBehaviour
 	
 	void Update ()
     {
-        progress += 0.001f;
+        progress += DiseaseManager.Instance.GrowthSpeed;
         progress = Mathf.Min(1f, progress);
         m_Image.fillAmount = progress;
         m_Image.color = DiseaseManager.Instance.DiseaseColor.Evaluate(progress);
 
+        int rndvalue = Random.Range(0, DiseaseManager.Instance.SpreadDelay);
+        if ( rndvalue == 0)
+        {
+            float val = 1f - Mathf.Pow(UnityEngine.Random.Range(0f, 1f), 3f);
+            //Debug.Log(val + " vs " + progress);
+            if (val < progress)
+            {
+                DiseaseManager.Instance.SpreadFrom(GetComponent<Node>());
+            }
+        }
 	}
 }

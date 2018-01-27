@@ -15,12 +15,26 @@ public class Connection : MonoBehaviour
 {
     public Node m_Node1, m_Node2;
     public ConnectionType m_Type;
+    public float Width = 5;
+
+    private SpriteRenderer m_Sprite;
+
+
+    ConnectionType Type
+    {
+        get { return m_Type; }
+        set { if ( m_Type != value )
+            {
+                m_Type = value;
+            }
+        }
+    }
 
     public void Set(Node n1, Node n2, ConnectionType type)
     {
         m_Node1 = n1;
         m_Node2 = n2;
-        m_Type = type;
+        Type = type;
     }
 
 		public Node OtherEnd(Node node) 
@@ -44,6 +58,10 @@ public class Connection : MonoBehaviour
         }
     }
 
+    void OnEnable()
+    {
+    }
+
     private void Update()
     {
         if ( !Application.isPlaying )
@@ -60,16 +78,16 @@ public class Connection : MonoBehaviour
     {
         SpriteRenderer rend = sprite.GetComponent<SpriteRenderer>();
         if (rend == null) return;
-        float origSize = rend.sprite.pixelsPerUnit * rend.sprite.texture.texelSize.x;
+        Vector2 origSize = rend.sprite.pixelsPerUnit * rend.sprite.texture.texelSize;
 
         Vector3 centerPos = (pos1 + pos2) / 2f;
         sprite.transform.position = centerPos;
         Vector3 direction = (pos2-pos1).normalized;
         sprite.transform.right = direction;
         if (_mirrorZ) sprite.transform.right *= -1f;
-        Vector3 scale = new Vector3(1, 1, 1);
-        scale.x = Vector3.Distance(pos1, pos2);
-        sprite.transform.localScale = origSize * scale ;
+        Vector3 scale = new Vector3(origSize.x, Width, 1);
+        scale.x *= Vector3.Distance(pos1, pos2);
+        sprite.transform.localScale = scale;
     }
 
     public void DrawGizmo()
