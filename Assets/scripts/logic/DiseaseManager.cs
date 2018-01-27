@@ -182,7 +182,7 @@ public class DiseaseManager : MonoBehaviour
 		{
 			var position = n.transform.position;
 
-			MessageManager.Instance.AddMessage("Outbreak detected at\n[Locate]",
+			MessageManager.Instance.AddMessage("Outbreak detected!\n[Locate]",
 				() => CameraPanAndZoom.Instance.GoToPoint(position));
 		}
 
