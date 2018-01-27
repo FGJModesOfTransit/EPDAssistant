@@ -106,7 +106,7 @@ public class Movement : MonoBehaviour
 	{
 		if (OnMovementComplete != null) 
 		{
-			OnMovementComplete(gameObject, route_ [0]);
+			OnMovementComplete(gameObject, currentNode_);
 		}
 		moveNext ();
 	}
