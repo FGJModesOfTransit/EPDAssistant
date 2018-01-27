@@ -156,11 +156,11 @@ public class DiseaseManager : MonoBehaviour
 			
 		if (m_CurrentWave == 0) 
 		{
-			MessageManager.Instance.AddMessage ("A pathogen detect! Please advice!");
+			MessageManager.Instance.AddMessage ("A pathogen detected! Please advice!");
 		}
 		else 
 		{
-			MessageManager.Instance.AddMessage ("New pathogen detect! Prepare for wave " + (1 + m_CurrentWave));
+			MessageManager.Instance.AddMessage ("New pathogen detected! Prepare for wave " + (1 + m_CurrentWave));
 		}
     }
 
