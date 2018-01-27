@@ -44,6 +44,7 @@ public class NodeSelectionManager : MonoBehaviour
 		}
 		else 
 		{
+			button.transform.position = node.transform.position;
 			button.SetActive(true);
 		}
 

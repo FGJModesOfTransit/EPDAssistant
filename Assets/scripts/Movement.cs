@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -62,27 +63,27 @@ public class Movement : MonoBehaviour
 
 	void highlightNeighbours()
 	{
-		List<Connection> conns;
-		Node highlight = currentNode_;
+		var target = route_.LastOrDefault ();
 
-		// if still route left, select last node for highlighting.
-		if (route_.Count > 0) {
-			highlight = route_ [route_.Count - 1];
-			Debug.Log ("Highligting current node named:" + highlight.name);
+		if (target == null) 
+		{
+			target = currentNode_;
 		}
-		highlight.IsSelectable = true;
-		highlighted_.Add(highlight);
-		Debug.Log ("Highligting current node named:" + highlight.name);
-		conns = graph_.GetConnections (highlight);
-		Debug.Log ("Highlighting ends of" + conns.Count + " connections");
-		foreach (Connection c in conns) {
-			Node high = c.OtherEnd (highlight);
-			high.IsSelectable = true;
-			highlighted_.Add(high);
-			Debug.Log ("Highligting node:" + high.name);
+
+		if (target != null) 
+		{
+			Debug.Log ("Target node:" + target.name, target);
+			var conns = graph_.GetConnections (target);
+			foreach (Connection c in conns) 
+			{
+				Node high = c.OtherEnd (target);
+				high.IsSelectable = true;
+				highlighted_.Add(high);
+				Debug.Log ("Highligting node:" + high.name, high);
+			}
 		}
 	}
-
+		
 	void moveNext()
 	{
 		if (route_.Count == 0) {
