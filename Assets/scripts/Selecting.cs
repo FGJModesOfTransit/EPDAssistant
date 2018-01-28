@@ -12,8 +12,7 @@ public class Selecting : MonoBehaviour {
 		if (n == null) {
 			Debug.LogError ("No node set for selecting");
 			return;
-		}
-		Debug.Log("Clicked node." + n.name);
+		}	
 
 		Movement.PlayerCharacter.GetComponent<Movement>().AddTarget (n);
 	}

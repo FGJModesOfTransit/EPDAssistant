@@ -18,4 +18,9 @@ public class EndScene : MonoBehaviour
 	{
 		SceneManager.LoadScene (1);
 	}
+
+	public void SignOut()
+	{
+		Application.Quit();
+	}
 }
