@@ -62,8 +62,8 @@ public class Node : MonoBehaviour
             //msg += otherName + ", ";
         }
 
-        if (!m_Lost) DiseaseManager.Instance.AddLost(this);
         m_Lost = true;
+        if (!m_Lost) DiseaseManager.Instance.AddLost(this);
         Transform imTrs = transform.Find("NodeGraphic");
         if (imTrs != null)
         {
