@@ -39,7 +39,11 @@ public class DiseaseManager : MonoBehaviour
     //public static List<List<Node>> sLostHistory;
     //public static int sTotalInfected;
     public static List<WaveResults> sWaveResults;
+	[SerializeField]
+	private AudioClip[] sounds_;
 
+    public static List<List<Node>> sLostHistory;
+    public static int sTotalInfected;
     public Image ImagePrefab;
     public Gradient DiseaseColor;
     public DiseaseWave[] Waves;
@@ -174,6 +178,27 @@ public class DiseaseManager : MonoBehaviour
 
     private void EndWave()
     {
+        while (sWaveResults.Count <= m_CurrentWave)
+        {
+            sWaveResults.Add(new WaveResults());
+            sWaveResults[sWaveResults.Count - 1].LostNodePopulations = new List<int>();
+        }
+
+        sWaveResults[m_CurrentWave].SavedNodePopulations = new List<int>();
+        Node[] nodes = GraphManager.Instance.GetActiveNodes();
+        foreach (Node n in nodes)
+        {
+            if ( !n.Lost)
+            {
+                sWaveResults[m_CurrentWave].SavedNodePopulations.Add(n.CurrentPopulation);
+            }
+        }
+        sWaveResults[m_CurrentWave].DiseaseName = Waves[m_CurrentWave].name;
+        int total = CountTotalInflicted();
+        int previous = m_CurrentWave > 0 ? sWaveResults[m_CurrentWave - 1].Infections : 0;
+        sWaveResults[m_CurrentWave].Infections = total - previous;
+        sWaveResults[m_CurrentWave].WaveNumber = m_CurrentWave + 1; 
+
         m_WaveTimer = 0f;
         m_State = State.Waiting;
     }
@@ -191,7 +216,10 @@ public class DiseaseManager : MonoBehaviour
 			var position = n.transform.position;
 
 			MessageManager.Instance.AddMessage("Outbreak detected! Please advice.\n[Tap to locate]",
-				() => CameraPanAndZoom.Instance.GoToPoint(position));
+				() => CameraPanAndZoom.Instance.GoToPoint(position), false);
+
+			GetComponent<AudioSource> ().clip = sounds_[0];
+			GetComponent<AudioSource> ().Play ();
 		}
 
 		return success;
@@ -330,6 +358,9 @@ public class DiseaseManager : MonoBehaviour
 		var position = disease.transform.position;
 		MessageManager.Instance.AddMessage("Uncontrolled outbreak! Quarantine issued\n[Tap to locate]",
 			() => CameraPanAndZoom.Instance.GoToPoint(position));
+
+		GetComponent<AudioSource> ().clip = sounds_[1];
+		GetComponent<AudioSource> ().Play ();
 
 		diseases.Remove(disease);
 
