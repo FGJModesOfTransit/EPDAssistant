@@ -130,6 +130,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialPopulation: 100
+  level: 0
+  OnRoute: 0
 --- !u!212 &212168159043597506
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -164,7 +166,7 @@ SpriteRenderer:
   m_SortingLayerID: -425438083
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 799ca63e3583ac24f9b21f6cf5f3ffd2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6e4469b26dcb47948af594079515c72d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
