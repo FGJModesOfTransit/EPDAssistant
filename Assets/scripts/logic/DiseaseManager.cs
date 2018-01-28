@@ -36,9 +36,6 @@ public class DiseaseManager : MonoBehaviour
 	[SerializeField]
 	private float healProtectionTime = 10;
 
-	[SerializeField]
-	private AudioClip[] sounds_;
-
     public static List<List<Node>> sLostHistory;
     public static int sTotalInfected;
     public Image ImagePrefab;
@@ -194,8 +191,7 @@ public class DiseaseManager : MonoBehaviour
 			MessageManager.Instance.AddMessage("Outbreak detected! Please advice.\n[Tap to locate]",
 				() => CameraPanAndZoom.Instance.GoToPoint(position), false);
 
-			GetComponent<AudioSource> ().clip = sounds_[0];
-			GetComponent<AudioSource> ().Play ();
+			GetComponents<AudioSource> ()[0].Play ();
 		}
 
 		return success;
@@ -313,6 +309,8 @@ public class DiseaseManager : MonoBehaviour
 
 		pastInflicted += Mathf.FloorToInt(disease.progress * (float)node.CurrentPopulation);
 
+		GetComponents<AudioSource> ()[2].Play ();
+
 		diseases.Remove(disease);
 
 		disease.Remove();
@@ -335,8 +333,7 @@ public class DiseaseManager : MonoBehaviour
 		MessageManager.Instance.AddMessage("Uncontrolled outbreak! Quarantine issued\n[Tap to locate]",
 			() => CameraPanAndZoom.Instance.GoToPoint(position));
 
-		GetComponent<AudioSource> ().clip = sounds_[1];
-		GetComponent<AudioSource> ().Play ();
+		GetComponents<AudioSource> ()[1].Play ();
 
 		diseases.Remove(disease);
 
