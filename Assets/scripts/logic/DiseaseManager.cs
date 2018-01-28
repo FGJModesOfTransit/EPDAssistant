@@ -158,14 +158,16 @@ public class DiseaseManager : MonoBehaviour
         m_DiseaseCounter = 0;
         m_WaveTimer = 0f;
 
-        if ( m_CurrentWave == Waves.Length )
+        if (m_CurrentWave == Waves.Length)
         {
             MessageManager.Instance.AddMessage("Congratulations! No more disease!");
-            gameObject.SetActive(false);
+            --m_CurrentWave;
+            GameOver();
+            //gameObject.SetActive(false);
             return;
         }
-			
-		if (m_CurrentWave == 0) 
+
+        if (m_CurrentWave == 0) 
 		{
 			MessageManager.Instance.AddMessage ("A pathogen detected! Stand by.");
 		}
