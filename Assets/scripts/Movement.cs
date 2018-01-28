@@ -31,7 +31,7 @@ public class Movement : MonoBehaviour
 
 	List<Node> highlighted_ = new List<Node> ();
 
-	int id = 0;
+	int moveTweenId = 0;
 
 	void OnEnable()
 	{
@@ -59,78 +59,107 @@ public class Movement : MonoBehaviour
 		
 	public void AddTarget(Node target)
 	{
-		// assumes always legal
-		Debug.Log("Adding a new target");
-
-		if (currentNode_ == null) {
+		if (currentNode_ == null) 
+		{
 			Debug.LogError ("Current node not set! Set currrent node in editor.");
 			return;
-	  }
+	  	}
 
-		if (target.OnRoute) {
-			Debug.Log ("Deleting route");
+		if (target.OnRoute)
+		{
 			//check if on route and delete route from that point onwards
 
-			if (target == currentNode_) {
-				Debug.Log ("Its the curren node");
-				if (route_.Count > 0) {
-					GraphManager.Instance.GetConnection (currentNode_, 
-						route_ [0]).SetOnPath (false, false);
+			if (target == currentNode_) 
+			{
+				if (route_.Count > 0) 
+				{
+					if (currentNode_ != route_ [0]) 
+					{
+						GraphManager.Instance.GetConnection (currentNode_, route_ [0]).SetOnPath (false, false);
+					}
 
-
-					if (route_.Count > 1) {
-						for (int i = 1; i < route_.Count; ++i) {
-							GraphManager.Instance.GetConnection (route_ [i - 1], 
-								route_ [i]).SetOnPath (false, false);
+					if (route_.Count > 1) 
+					{
+						for (int i = 1; i < route_.Count; ++i) 
+						{
+							if (route_ [i - 1] != route_ [i]) 
+							{
+								GraphManager.Instance.GetConnection (route_ [i - 1], route_ [i]).SetOnPath (false, false);
+							}
 						}
 					}
 				}
 				route_.Clear ();
-			} else {
+			} 
+			else 
+			{
 				// delete nodes from end of route until we find the clickd node
-				for (int i = route_.Count; i > 1; --i) {
+				for (int i = route_.Count; i > 1; --i) 
+				{
 					if(route_[i - 1] == target)
 					{
 						break;
 					}
-					GraphManager.Instance.GetConnection (route_ [i - 2], 
-						route_ [i - 1]).SetOnPath (false, false);
-					route_.RemoveAt (i - 1);
+					if (route_ [i - 2] != route_ [i - 1]) 
+					{
+						GraphManager.Instance.GetConnection (route_ [i - 2], route_ [i - 1]).SetOnPath (false, false);
+						route_.RemoveAt (i - 1);
+					}
 				}
 			}
 		}
-		else if (!moving_) {
-			Debug.Log ("Starting to move");
+		else if (target == prevNode_ && moving_ && route_.Count < 1) 
+		{
+			if (route_.Count >= 2 && route_[route_.Count - 2] != route_[route_.Count - 1])
+			{
+				GraphManager.Instance.GetConnection(route_[route_.Count - 2], route_[route_.Count - 1]).SetOnPath(false, false);
+			}
+			route_.Clear ();
+			route_.Add (target);
+			prevNode_ = currentNode_;
+			LeanTween.cancel (moveTweenId);
+			moving_ = false;
+			moveNext ();
+		}
+		else if (!moving_) 
+		{
 			route_.Add (target);
 			moveNext ();
-
-		} else if (route_.Count > 0 && target == route_ [route_.Count - 1]) {
-			Debug.Log ("Removing a node from route");
-      if (route_.Count >= 2)
-      {
-          GraphManager.Instance.GetConnection(route_[route_.Count - 2], route_[route_.Count - 1]).SetOnPath(false, false);
-      }
+		} 
+		else if (route_.Count > 0 && target == route_ [route_.Count - 1]) 
+		{
+			if (route_.Count >= 2 && route_[route_.Count - 2] != route_[route_.Count - 1])
+			{
+			  GraphManager.Instance.GetConnection(route_[route_.Count - 2], route_[route_.Count - 1]).SetOnPath(false, false);
+			}
             route_.RemoveAt (route_.Count - 1);
-		} else
+		}
+		else
         {
             Node prev = route_.Count > 0 ? route_[route_.Count-1] : currentNode_;
             Connection conn = GraphManager.Instance.GetConnection(prev, target);
-            conn.SetOnPath(true, conn.m_Node1 == target);
-			if (route_.Count < 2) {
+			if (conn != null) 
+			{
+				conn.SetOnPath(true, conn.m_Node1 == target);
+			}
+            
+			if (route_.Count < 2) 
+			{
 				route_.Add (target);
 			}
 		}
 
 		disableHighlighted ();
 		highlightRoute ();
-		if (route_.Count < 2) {
+
+		if (route_.Count < 2)
+		{
 			highlightNeighbours ();
 		}
 	}
 
 	void disableHighlighted()
 	{
-		Debug.Log ("Clearing " + highlighted_.Count + " nodes.");
 		foreach(Node n in highlighted_)
 		{
 			n.OnRoute = false;
@@ -184,8 +213,7 @@ public class Movement : MonoBehaviour
 	{
 		if (route_.Count == 0)
         {
-			Debug.Log ("Route finished");
-            if (prevNode_ != null)
+			if (prevNode_ != null && prevNode_ != currentNode_)
             {
                 graph_.GetConnection(prevNode_, currentNode_).SetOnPath(false, false);
             }
@@ -197,25 +225,34 @@ public class Movement : MonoBehaviour
         route_.RemoveAt(0);
 
 		Connection conn = graph_.GetConnection(currentNode_, nextNode);
-        conn.SetOnPath(true, conn.m_Node2 == currentNode_);
-
-		float routeSpeed = conn.TravelTime * 
-			Vector2.Distance(currentNode_.gameObject.transform.position, 
-		  nextNode.gameObject.transform.position);
-		//Debug.Log("Setting travel time to: " + routeSpeed);
-		if (conn.m_Type == ConnectionType.Path) {
-			id = LeanTween.move (gameObject, nextNode.gameObject.transform, routeSpeed).setEase (LeanTweenType.linear).id;
-		} else {
-			id = LeanTween.move (gameObject, nextNode.gameObject.transform, routeSpeed).setEase (LeanTweenType.easeInOutSine).id;
+		if (conn == null) 
+		{
+			Debug.LogError ("Trying to move without connection", nextNode);
+			return;
 		}
-		LTDescr d = LeanTween.descr( id );
 
-		if(d!=null){ // if the tween has already finished it will return null
+		conn.SetOnPath(true, conn.m_Node2 == currentNode_);
+		float routeSpeed = conn.TravelTime * Vector2.Distance(transform.position, nextNode.gameObject.transform.position);
+
+		//Debug.Log("Setting travel time to: " + routeSpeed);
+		if (conn.m_Type == ConnectionType.Path) 
+		{
+			moveTweenId = LeanTween.move (gameObject, nextNode.gameObject.transform, routeSpeed).setEase (LeanTweenType.linear).id;
+		}
+		else
+		{
+			moveTweenId = LeanTween.move (gameObject, nextNode.gameObject.transform, routeSpeed).setEase (LeanTweenType.easeInOutSine).id;
+		}
+		LTDescr d = LeanTween.descr( moveTweenId );
+
+		// if the tween has already finished it will return null
+		if(d!=null)
+		{ 
 			// change some parameters
 			d.setOnComplete( HandleMovementComplete );
 		}
 
-        if (prevNode_ != null)
+		if (prevNode_ != null && currentNode_ != prevNode_)
         {
             graph_.GetConnection(prevNode_, currentNode_).SetOnPath(false, false);
         }
