@@ -36,8 +36,9 @@ public class DiseaseManager : MonoBehaviour
 	[SerializeField]
 	private float healProtectionTime = 10;
 
-    public static List<List<Node>> sLostHistory;
-    public static int sTotalInfected;
+    //public static List<List<Node>> sLostHistory;
+    //public static int sTotalInfected;
+    public static List<WaveResults> sWaveResults;
 
     public Image ImagePrefab;
     public Gradient DiseaseColor;
@@ -104,7 +105,7 @@ public class DiseaseManager : MonoBehaviour
     void Init()
     {
         m_DiseaseCanvas = GameObject.Find("DiseaseCanvas").GetComponent<Canvas>();
-        sLostHistory = new List<List<Node>>();
+        sWaveResults = new List<WaveResults>();
     }
 
 	void OnEnable()
@@ -356,8 +357,7 @@ public class DiseaseManager : MonoBehaviour
 
 	public int CountTotalInflicted()
 	{
-		sTotalInfected = pastInflicted + CountCurrentInflicted();
-        return sTotalInfected;
+		return pastInflicted + CountCurrentInflicted();
 	}
 
     public string GetDiseaseName()
@@ -380,11 +380,14 @@ public class DiseaseManager : MonoBehaviour
 
     public void AddLost(Node n)
     {
-        while ( sLostHistory.Count <= m_CurrentWave )
+        while ( sWaveResults.Count <= m_CurrentWave )
         {
-            sLostHistory.Add(new List<Node>());
+            sWaveResults.Add(new WaveResults());
+            sWaveResults[sWaveResults.Count - 1].LostNodePopulations = new List<int>();
         }
-        sLostHistory[m_CurrentWave].Add(n);
+
+        sWaveResults[m_CurrentWave].LostNodePopulations.Add(n.CurrentPopulation);
+
         m_LostCount++;
         int totalCount = GraphManager.Instance.GetActiveNodes().Length;
         if ( 2 * m_LostCount >= totalCount )
