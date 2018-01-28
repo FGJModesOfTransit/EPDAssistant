@@ -99,6 +99,7 @@ public class DiseaseManager : MonoBehaviour
 		{
 			var effect = Instantiate (spreadEffectPrefab, n.transform.position, Quaternion.identity);
 			effect.transform.LookAt (victim.transform.position, -Vector3.forward);
+			GetComponents<AudioSource> ()[3].Play ();
 		}
     }
 
