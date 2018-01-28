@@ -200,6 +200,7 @@ MonoBehaviour:
   sounds_:
   - {fileID: 8300000, guid: 47af7ce7a8e36444fb93511ff8f23c7a, type: 3}
   - {fileID: 8300000, guid: f14625469c665ea4690faab2cbd4765f, type: 3}
+  - {fileID: 8300000, guid: caf5d00eddc5c594d9fe87498ea6c780, type: 3}
   ImagePrefab: {fileID: 114356243335669764, guid: 388a082e37d38544baec9c5502b93da0,
     type: 2}
   DiseaseColor:

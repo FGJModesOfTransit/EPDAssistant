@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,9 +40,6 @@ public class DiseaseManager : MonoBehaviour
     //public static List<List<Node>> sLostHistory;
     //public static int sTotalInfected;
     public static List<WaveResults> sWaveResults;
-	[SerializeField]
-	private AudioClip[] sounds_;
-
     public static List<List<Node>> sLostHistory;
     public static int sTotalInfected;
     public Image ImagePrefab;
@@ -195,7 +193,7 @@ public class DiseaseManager : MonoBehaviour
         }
         sWaveResults[m_CurrentWave].DiseaseName = Waves[m_CurrentWave].name;
         int total = CountTotalInflicted();
-        int previous = m_CurrentWave > 0 ? sWaveResults[m_CurrentWave - 1].Infections : 0;
+		int previous = m_CurrentWave > 0 ? sWaveResults.Sum(result => result.Infections) : 0;
         sWaveResults[m_CurrentWave].Infections = total - previous;
         sWaveResults[m_CurrentWave].WaveNumber = m_CurrentWave + 1;
     }
@@ -223,8 +221,7 @@ public class DiseaseManager : MonoBehaviour
 			MessageManager.Instance.AddMessage("Outbreak detected! Please advice.\n[Tap to locate]",
 				() => CameraPanAndZoom.Instance.GoToPoint(position));
 
-			GetComponent<AudioSource> ().clip = sounds_[0];
-			GetComponent<AudioSource> ().Play ();
+			GetComponents<AudioSource> ()[0].Play ();
 		}
 
 		return success;
@@ -342,6 +339,8 @@ public class DiseaseManager : MonoBehaviour
 
 		pastInflicted += Mathf.FloorToInt(disease.progress * (float)node.CurrentPopulation);
 
+		GetComponents<AudioSource> ()[2].Play ();
+
 		diseases.Remove(disease);
 
 		disease.Remove();
@@ -364,8 +363,7 @@ public class DiseaseManager : MonoBehaviour
 		MessageManager.Instance.AddMessage("Uncontrolled outbreak! Quarantine issued\n[Tap to locate]",
 			() => CameraPanAndZoom.Instance.GoToPoint(position));
 
-		GetComponent<AudioSource> ().clip = sounds_[1];
-		GetComponent<AudioSource> ().Play ();
+		GetComponents<AudioSource> ()[1].Play ();
 
 		diseases.Remove(disease);
 

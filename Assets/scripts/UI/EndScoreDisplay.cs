@@ -24,7 +24,7 @@ public class EndScoreDisplay : MonoBehaviour
 
 	void Start()
 	{
-		var results = MakeDummyData ();
+		var results = DiseaseManager.sWaveResults;
 		Init (results);
 		StartCoroutine (Show_Coroutine(results));
 	}
