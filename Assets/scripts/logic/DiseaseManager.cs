@@ -36,6 +36,9 @@ public class DiseaseManager : MonoBehaviour
 	[SerializeField]
 	private float healProtectionTime = 10;
 
+    //public static List<List<Node>> sLostHistory;
+    //public static int sTotalInfected;
+    public static List<WaveResults> sWaveResults;
 	[SerializeField]
 	private AudioClip[] sounds_;
 
@@ -106,7 +109,7 @@ public class DiseaseManager : MonoBehaviour
     void Init()
     {
         m_DiseaseCanvas = GameObject.Find("DiseaseCanvas").GetComponent<Canvas>();
-        sLostHistory = new List<List<Node>>();
+        sWaveResults = new List<WaveResults>();
     }
 
 	void OnEnable()
@@ -175,6 +178,27 @@ public class DiseaseManager : MonoBehaviour
 
     private void EndWave()
     {
+        while (sWaveResults.Count <= m_CurrentWave)
+        {
+            sWaveResults.Add(new WaveResults());
+            sWaveResults[sWaveResults.Count - 1].LostNodePopulations = new List<int>();
+        }
+
+        sWaveResults[m_CurrentWave].SavedNodePopulations = new List<int>();
+        Node[] nodes = GraphManager.Instance.GetActiveNodes();
+        foreach (Node n in nodes)
+        {
+            if ( !n.Lost)
+            {
+                sWaveResults[m_CurrentWave].SavedNodePopulations.Add(n.CurrentPopulation);
+            }
+        }
+        sWaveResults[m_CurrentWave].DiseaseName = Waves[m_CurrentWave].name;
+        int total = CountTotalInflicted();
+        int previous = m_CurrentWave > 0 ? sWaveResults[m_CurrentWave - 1].Infections : 0;
+        sWaveResults[m_CurrentWave].Infections = total - previous;
+        sWaveResults[m_CurrentWave].WaveNumber = m_CurrentWave + 1; 
+
         m_WaveTimer = 0f;
         m_State = State.Waiting;
     }
@@ -364,8 +388,7 @@ public class DiseaseManager : MonoBehaviour
 
 	public int CountTotalInflicted()
 	{
-		sTotalInfected = pastInflicted + CountCurrentInflicted();
-        return sTotalInfected;
+		return pastInflicted + CountCurrentInflicted();
 	}
 
     public string GetDiseaseName()
@@ -388,11 +411,14 @@ public class DiseaseManager : MonoBehaviour
 
     public void AddLost(Node n)
     {
-        while ( sLostHistory.Count <= m_CurrentWave )
+        while ( sWaveResults.Count <= m_CurrentWave )
         {
-            sLostHistory.Add(new List<Node>());
+            sWaveResults.Add(new WaveResults());
+            sWaveResults[sWaveResults.Count - 1].LostNodePopulations = new List<int>();
         }
-        sLostHistory[m_CurrentWave].Add(n);
+
+        sWaveResults[m_CurrentWave].LostNodePopulations.Add(n.CurrentPopulation);
+
         m_LostCount++;
         int totalCount = GraphManager.Instance.GetActiveNodes().Length;
         if ( 2 * m_LostCount >= totalCount )

@@ -55,11 +55,11 @@ public class MessageManager : MonoBehaviour
 
 	IEnumerator Start()
 	{
-		yield return new WaitForSeconds (3);
+		yield return new WaitForSeconds (1);
 		AddMessage ("Hi there dispatcher, I'm the local doctor. Seems to be a quiet day!", () => CameraPanAndZoom.Instance.GoToPoint (Movement.PlayerCharacter.transform.position));
 	}
 
-	public void AddMessage(string content, Action action = null, bool sound = true)
+	public void AddMessage(string content, Action action = null)
 	{
 		var message = new Message (){ Content = content, TimeToLive = messageTime, TapAction = action };
 
@@ -67,9 +67,6 @@ public class MessageManager : MonoBehaviour
 
 		if (currentMessage == null) 
 		{
-			if (sound) {
-				GetComponent<AudioSource> ().Play ();
-			}
 			ShowNextMessage();
 		}
 	}
