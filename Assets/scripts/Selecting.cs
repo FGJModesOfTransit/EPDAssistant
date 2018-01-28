@@ -14,6 +14,9 @@ public class Selecting : MonoBehaviour {
 			return;
 		}	
 
-		Movement.PlayerCharacter.GetComponent<Movement>().AddTarget (n);
+		if (!CameraPanAndZoom.Instance.IsMoving) 
+		{
+			Movement.PlayerCharacter.GetComponent<Movement>().AddTarget (n);
+		}
 	}
 }
