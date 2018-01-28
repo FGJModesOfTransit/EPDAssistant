@@ -6,14 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class EndScene : MonoBehaviour 
 {
-	[SerializeField]
-	private Text scoreLabel;
-
-	void Start () 
-	{
-		scoreLabel.text = "Wave X\nTotal Infected X";
-	}
-
 	public void Replay()
 	{
 		SceneManager.LoadScene (1);
