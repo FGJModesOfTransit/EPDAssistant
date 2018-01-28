@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [Serializable]
 public struct DiseaseWave
@@ -35,6 +36,9 @@ public class DiseaseManager : MonoBehaviour
 	[SerializeField]
 	private float healProtectionTime = 10;
 
+    public static List<List<Node>> sLostHistory;
+    public static int sTotalInfected;
+
     public Image ImagePrefab;
     public Gradient DiseaseColor;
     public DiseaseWave[] Waves;
@@ -45,8 +49,9 @@ public class DiseaseManager : MonoBehaviour
 	public float GrowthSpeed { get { return growthSpeed * deseaseSpeedMultiplier; }}
 
     public int SpreadDelay;
+    private int m_LostCount;
 
-	public static event Action<Node, Disease> OnDiseaseAdded;
+    public static event Action<Node, Disease> OnDiseaseAdded;
 	public static event Action<int> OnWaveCompleted;
 
     private Canvas m_DiseaseCanvas;
@@ -99,7 +104,8 @@ public class DiseaseManager : MonoBehaviour
     void Init()
     {
         m_DiseaseCanvas = GameObject.Find("DiseaseCanvas").GetComponent<Canvas>();
-	}
+        sLostHistory = new List<List<Node>>();
+    }
 
 	void OnEnable()
 	{
@@ -350,7 +356,8 @@ public class DiseaseManager : MonoBehaviour
 
 	public int CountTotalInflicted()
 	{
-		return pastInflicted + CountCurrentInflicted();
+		sTotalInfected = pastInflicted + CountCurrentInflicted();
+        return sTotalInfected;
 	}
 
     public string GetDiseaseName()
@@ -361,6 +368,28 @@ public class DiseaseManager : MonoBehaviour
         } else
         {
             return "None";
+        }
+    }
+
+    public void GameOver()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public int LostCount { get { return m_LostCount; } }
+
+    public void AddLost(Node n)
+    {
+        while ( sLostHistory.Count <= m_CurrentWave )
+        {
+            sLostHistory.Add(new List<Node>());
+        }
+        sLostHistory[m_CurrentWave].Add(n);
+        m_LostCount++;
+        int totalCount = GraphManager.Instance.GetActiveNodes().Length;
+        if ( 2 * m_LostCount >= totalCount )
+        {
+            GameOver();
         }
     }
 }

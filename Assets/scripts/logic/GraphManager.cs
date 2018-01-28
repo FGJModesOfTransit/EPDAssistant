@@ -81,6 +81,11 @@ public class GraphManager : MonoBehaviour
         return result;
     }
 
+    public Node[] GetActiveNodes()
+    {
+        return m_Nodes.Where(node => node.gameObject.activeInHierarchy).ToArray();
+    }
+
     public Node[] GetNodes()
     {
         return m_Nodes;
@@ -88,7 +93,7 @@ public class GraphManager : MonoBehaviour
 
     public Node GetRandomNode()
     {
-		var activeNodes = m_Nodes.Where (node => node.gameObject.activeInHierarchy).ToArray();
+        var activeNodes = GetActiveNodes();
         int index = UnityEngine.Random.Range(0, activeNodes.Length);
         if ( index >= activeNodes.Length)
         {
