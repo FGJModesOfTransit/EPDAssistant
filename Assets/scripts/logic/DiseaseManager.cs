@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -192,7 +193,7 @@ public class DiseaseManager : MonoBehaviour
         }
         sWaveResults[m_CurrentWave].DiseaseName = Waves[m_CurrentWave].name;
         int total = CountTotalInflicted();
-        int previous = m_CurrentWave > 0 ? sWaveResults[m_CurrentWave - 1].Infections : 0;
+		int previous = m_CurrentWave > 0 ? sWaveResults.Sum(result => result.Infections) : 0;
         sWaveResults[m_CurrentWave].Infections = total - previous;
         sWaveResults[m_CurrentWave].WaveNumber = m_CurrentWave + 1; 
 
