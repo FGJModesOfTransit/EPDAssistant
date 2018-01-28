@@ -175,7 +175,7 @@ public class DiseaseManager : MonoBehaviour
 		}
     }
 
-    private void EndWave()
+    private void SetWaveResults()
     {
         while (sWaveResults.Count <= m_CurrentWave)
         {
@@ -187,7 +187,7 @@ public class DiseaseManager : MonoBehaviour
         Node[] nodes = GraphManager.Instance.GetActiveNodes();
         foreach (Node n in nodes)
         {
-            if ( !n.Lost)
+            if (!n.Lost)
             {
                 sWaveResults[m_CurrentWave].SavedNodePopulations.Add(n.CurrentPopulation);
             }
@@ -196,7 +196,12 @@ public class DiseaseManager : MonoBehaviour
         int total = CountTotalInflicted();
 		int previous = m_CurrentWave > 0 ? sWaveResults.Sum(result => result.Infections) : 0;
         sWaveResults[m_CurrentWave].Infections = total - previous;
-        sWaveResults[m_CurrentWave].WaveNumber = m_CurrentWave + 1; 
+        sWaveResults[m_CurrentWave].WaveNumber = m_CurrentWave + 1;
+    }
+
+    private void EndWave()
+    {
+        SetWaveResults();
 
         m_WaveTimer = 0f;
         m_State = State.Waiting;
@@ -215,7 +220,7 @@ public class DiseaseManager : MonoBehaviour
 			var position = n.transform.position;
 
 			MessageManager.Instance.AddMessage("Outbreak detected! Please advice.\n[Tap to locate]",
-				() => CameraPanAndZoom.Instance.GoToPoint(position), false);
+				() => CameraPanAndZoom.Instance.GoToPoint(position));
 
 			GetComponents<AudioSource> ()[0].Play ();
 		}
@@ -403,6 +408,7 @@ public class DiseaseManager : MonoBehaviour
 
     public void GameOver()
     {
+        SetWaveResults();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
