@@ -115,7 +115,7 @@ MonoBehaviour:
     type: 2}
   spreadEffectPrefab: {fileID: 1577962676635744, guid: 64213fae6a55b454b839fa928ab3d4b9,
     type: 2}
-  healProtectionTime: 10
+  healProtectionTime: 12
   ImagePrefab: {fileID: 114356243335669764, guid: 388a082e37d38544baec9c5502b93da0,
     type: 2}
   DiseaseColor:
@@ -194,7 +194,7 @@ MonoBehaviour:
     - 32
     name: Plague
   TimeBetweenWaves: 4
-  GrowthSpeed: 0.00035
+  growthSpeed: 0.0003
   SpreadDelay: 150
 --- !u!223 &223467189210867082
 Canvas:

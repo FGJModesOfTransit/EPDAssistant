@@ -36,6 +36,9 @@ public class CameraPanAndZoom : MonoBehaviour
 	private float maxCameraScale = 5f;
 
 	[SerializeField]
+	private Transform initialFocus;
+
+	[SerializeField]
 	private Vector2 minBounds;
 	[SerializeField]
 	private Vector2 maxBounds;
@@ -68,10 +71,10 @@ public class CameraPanAndZoom : MonoBehaviour
 	{
 		yield return new WaitForSeconds (1);
 
-		if (Movement.PlayerCharacter != null) 
+		if (initialFocus != null) 
 		{
-			GoToPoint(Movement.PlayerCharacter.transform.position);
-			LeanTween.value (gameCamera.orthographicSize, (minCameraScale + maxCameraScale) * 0.5f, 1.5f)
+			GoToPoint(initialFocus.position);
+			LeanTween.value (gameCamera.orthographicSize, 7, 1.5f)
 				.setOnUpdate ((zoom) => {
 					gameCamera.orthographicSize = zoom;
 			});
