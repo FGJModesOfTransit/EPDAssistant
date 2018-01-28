@@ -20,6 +20,9 @@ public class CameraPanAndZoom : MonoBehaviour
 	}
 	private static CameraPanAndZoom m_Instance;
 
+	private float dragAmount = 0;
+	public bool IsMoving { get { return dragAmount > 150; } }
+
 	[SerializeField]
 	private float mouseZoomScale = 1;
 
@@ -111,6 +114,7 @@ public class CameraPanAndZoom : MonoBehaviour
 		{
 			underInertia = true;
 			dragging = false;
+			dragAmount = 0;
 		}
 		else if (Input.GetMouseButton(0))
 		{
@@ -125,6 +129,7 @@ public class CameraPanAndZoom : MonoBehaviour
 				touchposition = Input.touches[0].position;
 			}
 			difference = (gameCamera.ScreenToWorldPoint(touchposition)) - transform.position;
+			dragAmount += difference.magnitude;
 			if (!dragging)
 			{
 				dragging = true;
