@@ -35,6 +35,9 @@ public class DiseaseManager : MonoBehaviour
 	[SerializeField]
 	private float healProtectionTime = 10;
 
+	[SerializeField]
+	private AudioClip[] sounds_;
+
     public Image ImagePrefab;
     public Gradient DiseaseColor;
     public DiseaseWave[] Waves;
@@ -184,7 +187,10 @@ public class DiseaseManager : MonoBehaviour
 			var position = n.transform.position;
 
 			MessageManager.Instance.AddMessage("Outbreak detected! Please advice.\n[Tap to locate]",
-				() => CameraPanAndZoom.Instance.GoToPoint(position));
+				() => CameraPanAndZoom.Instance.GoToPoint(position), false);
+
+			GetComponent<AudioSource> ().clip = sounds_[0];
+			GetComponent<AudioSource> ().Play ();
 		}
 
 		return success;
@@ -323,6 +329,9 @@ public class DiseaseManager : MonoBehaviour
 		var position = disease.transform.position;
 		MessageManager.Instance.AddMessage("Uncontrolled outbreak! Quarantine issued\n[Tap to locate]",
 			() => CameraPanAndZoom.Instance.GoToPoint(position));
+
+		GetComponent<AudioSource> ().clip = sounds_[1];
+		GetComponent<AudioSource> ().Play ();
 
 		diseases.Remove(disease);
 
