@@ -1,0 +1,19 @@
+<?xml version="1.0" standalone="no"?>
+<svg version="1.0" width="500" height="500" viewBox="0 -150 1000 800"  preserveAspectRatio="none"
+xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:cc="http://web.resource.org/cc/"
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:svg="http://www.w3.org/2000/svg"
+xmlns="http://www.w3.org/2000/svg">
+<path d="M 550,70 L 350,70 300,90 Q 130,90 10,330 5,360 80,380 200,380 550,380 L
+700,380  700,340 740,340 740,380 
+1050,380 1050,70 740,70 740,110 700,110 700,70"
+stroke="none" fill="black" id="train"/>
+<path d="M 260,130 L 210,130 Q 180,130 100,220 Q 160,230 210,250 "
+stroke="none" fill="white" id="window"/>
+<rect x="-5" y="420" width="1050" height="30" fill="black" id="track"/>
+<path d="M 450,200 1050,180 1050,200"
+stroke="none" fill="white" id="wind1"/>
+<path d="M 300,270 1050,250 1050,270"
+stroke="none" fill="white" id="wind2"/>
+</svg>
