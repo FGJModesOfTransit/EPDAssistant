@@ -220,7 +220,7 @@ public class DiseaseManager : MonoBehaviour
 			var position = n.transform.position;
 
 			MessageManager.Instance.AddMessage("Outbreak detected! Please advice.\n[Tap to locate]",
-				() => CameraPanAndZoom.Instance.GoToPoint(position));
+				() => CameraPanAndZoom.Instance.GoToPoint(position), false);
 
 			GetComponents<AudioSource> ()[0].Play ();
 		}
